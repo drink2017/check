@@ -17,5 +17,10 @@ public:
 
 private:
     Ui::newCheck *ui;
+
+    QList<QPixmap> screenshots;
+
+public slots:
+    void slotOnBeginButton();
 };
 #endif // NEWCHECK_H

@@ -218,4 +218,3 @@ QGraphicsPathItem* screenshotView::getCurrentPenItem(){
 
 
 
-

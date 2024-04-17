@@ -146,5 +146,5 @@ void commandManager::disableDrawNumber(){
 }
 
 void commandManager::quit(){
-    QApplication::quit();
+    //点了叉后执行的操作
 }

@@ -34,7 +34,7 @@ void selectCommand::mouseReleaseCommand(QMouseEvent *event){
     currentSelectItem->setHover(true);
     currentSelectItem->setFinishSelect();
     commandManager::getInstance()->setSelectingArea(false);
-    screenshotView::getInstance()->setControl(new controlWidget());
+    screenshotView::getInstance()->setControl(new controlWidget(screenshotView::getInstance()));
     commandManager::getInstance()->connectToControlWidget();
     screenshotView::getInstance()->getControl()->show();
 }
