@@ -146,5 +146,19 @@ void commandManager::disableDrawNumber(){
 }
 
 void commandManager::quit(){
-    //点了叉后执行的操作
+    delete screenshotView::getInstance()->getControl()->myColorWidget;
+    delete screenshotView::getInstance()->getControl()->myTextWidget;
+    delete screenshotView::getInstance()->getInfo();
+    screenshotView::releaseInstance();
+
+    selectingArea = true;
+    drawingRect = false;
+    editingItem = false;
+    drawingEllipse = false;
+    drawingArrow = false;
+    drawingPen = false;
+    drawingText = false;
+    drawingNumber = false;
+    number = 1;
+    dragTotally = true;
 }

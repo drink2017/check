@@ -45,6 +45,13 @@ screenshotView* screenshotView::getInstance(){
     return instance;
 }
 
+void screenshotView::releaseInstance(){
+    if(instance != nullptr){
+        delete instance;
+        instance = nullptr;
+    }
+}
+
 
 void screenshotView::mousePressEvent(QMouseEvent *event)
 {

@@ -14,6 +14,7 @@ class screenshotView : public QGraphicsView
     Q_OBJECT
 public:
     static screenshotView* getInstance();
+    static void releaseInstance();
 
     QPoint getSelectStart();
     QPoint getSelectEnd();

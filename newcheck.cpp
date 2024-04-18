@@ -23,6 +23,28 @@ newCheck::newCheck(QWidget *parent)
         screenshot = screenshot.scaled(ui->label_screenshot->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
         ui->label_screenshot->setPixmap(screenshot);
     }
+
+    QString styleSheet = "QScrollBar:vertical {"
+                         "    background-color: #F0F0F0;"
+                         "    width: 20px;"
+                         "}"
+                         "QScrollBar::handle:vertical {"
+                         "    background-color: #909090;"
+                         "    min-height: 30px;"
+                         "}"
+                         "QScrollBar::add-line:vertical {"
+                         "    background-color: #E0E0E0;"
+                         "    height: 20px;"
+                         "    subcontrol-position: bottom;"
+                         "    subcontrol-origin: margin;"
+                         "}"
+                         "QScrollBar::sub-line:vertical {"
+                         "    background-color: #E0E0E0;"
+                         "    height: 20px;"
+                         "    subcontrol-position: top;"
+                         "    subcontrol-origin: margin;"
+                         "}";
+    ui->verticalScrollBar->setStyleSheet(styleSheet);
 }
 
 newCheck::~newCheck()
