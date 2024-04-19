@@ -1,6 +1,10 @@
 #include "newcheck.h"
 #include "ui_newcheck.h"
+#include "commandmanager.h"
 #include "screenshotview.h"
+
+#include <QDateTime>
+#include <QDebug>
 
 newCheck::newCheck(QWidget *parent)
     : QWidget(parent)
@@ -11,40 +15,24 @@ newCheck::newCheck(QWidget *parent)
     setFixedSize(633,652);
 
     connect(ui->pushButton_begin,&QPushButton::clicked,this,&newCheck::slotOnBeginButton);
+    connect(ui->pushButton_sign,&QPushButton::clicked,this,&newCheck::slotOnSignButton);
+    connect(ui->verticalScrollBar,&QScrollBar::valueChanged,this,&newCheck::changeScreenshot);
 
+    //签名icon
     QPixmap sign;
     if(sign.load("C:\\Users\\drink water\\Pictures\\微信头像.jpg")){
         ui->label_sign->setPixmap(sign);
         ui->label_sign->setScaledContents(true);
     }
 
-    QPixmap screenshot;
-    if(screenshot.load("C:\\Users\\drink water\\Pictures\\微信头像.jpg")){
-        screenshot = screenshot.scaled(ui->label_screenshot->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
-        ui->label_screenshot->setPixmap(screenshot);
-    }
+    //截图显示
+    ui->label_screenshot->setText("未有照片");
 
-    QString styleSheet = "QScrollBar:vertical {"
-                         "    background-color: #F0F0F0;"
-                         "    width: 20px;"
-                         "}"
-                         "QScrollBar::handle:vertical {"
-                         "    background-color: #909090;"
-                         "    min-height: 30px;"
-                         "}"
-                         "QScrollBar::add-line:vertical {"
-                         "    background-color: #E0E0E0;"
-                         "    height: 20px;"
-                         "    subcontrol-position: bottom;"
-                         "    subcontrol-origin: margin;"
-                         "}"
-                         "QScrollBar::sub-line:vertical {"
-                         "    background-color: #E0E0E0;"
-                         "    height: 20px;"
-                         "    subcontrol-position: top;"
-                         "    subcontrol-origin: margin;"
-                         "}";
+    //拉动条
+    QString styleSheet = "QScrollBar { background-color: gray; }";
     ui->verticalScrollBar->setStyleSheet(styleSheet);
+    ui->verticalScrollBar->setRange(0,commandManager::getInstance()->screenshots.size() - 1);
+    ui->verticalScrollBar->setPageStep(1);
 }
 
 newCheck::~newCheck()
@@ -54,6 +42,55 @@ newCheck::~newCheck()
 
 void newCheck::slotOnBeginButton(){
     screenshotView* w = screenshotView::getInstance();
+    w->setCheck(this);
     w->show();
 }
 
+void newCheck::slotOnSignButton(){
+    QDateTime currentDateTime = QDateTime::currentDateTime();
+    QString currentTime = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
+    ui->label_current->setText(currentTime);
+    ui->pushButton_sign->setEnabled(false);
+}
+
+void newCheck::updateScreenshots(){
+    ui->verticalScrollBar->setRange(0,commandManager::getInstance()->screenshots.size() - 1);
+    QPixmap screenshot;
+    if(commandManager::getInstance()->screenshots.size() == 0){
+        ui->label_screenshot->setText("未有照片");
+    }else{
+        screenshot = commandManager::getInstance()->screenshots.first().scaled(ui->label_screenshot->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+        ui->label_screenshot->setPixmap(screenshot);
+    }
+}
+
+void newCheck::changeScreenshot(int value){
+    if(commandManager::getInstance()->screenshots.size() > 0){
+        QPixmap screenshot;
+        screenshot = commandManager::getInstance()->screenshots.at(value).scaled(ui->label_screenshot->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+        ui->label_screenshot->setPixmap(screenshot);
+    }
+}
+
+void newCheck::wheelEvent(QWheelEvent *event)
+{
+    int numDegrees = event->angleDelta().y() / 8;
+    int numSteps = numDegrees / 15;
+
+    // 根据滚轮滚动方向更新当前显示的图片索引
+    int currentImageIndex = ui->verticalScrollBar->value();
+    currentImageIndex -= numSteps;
+
+    // 处理边界情况，确保图片索引在合法范围内
+    if (currentImageIndex < 0)
+        currentImageIndex = 0;
+    else if (currentImageIndex >= commandManager::getInstance()->screenshots.size())
+        currentImageIndex = commandManager::getInstance()->screenshots.size() - 1;
+
+    ui->verticalScrollBar->setValue(currentImageIndex);
+
+    // 在label中显示对应索引的图片
+    changeScreenshot(currentImageIndex);
+
+    event->accept();
+}

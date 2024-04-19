@@ -18,9 +18,14 @@ public:
 private:
     Ui::newCheck *ui;
 
-    QList<QPixmap> screenshots;
-
 public slots:
     void slotOnBeginButton();
+    void slotOnSignButton();
+    void updateScreenshots();
+    void changeScreenshot(int value);
+
+    // QWidget interface
+protected:
+    void wheelEvent(QWheelEvent *event) override;
 };
 #endif // NEWCHECK_H

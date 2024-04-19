@@ -7,6 +7,7 @@
 #include "mypenitem.h"
 #include "mytextitem.h"
 #include "mynumberitem.h"
+#include "newcheck.h"
 
 #include <commandmanager.h>
 #include <QGuiApplication>
@@ -14,6 +15,7 @@
 #include <QApplication>
 #include <QStyle>
 #include <QDebug>
+#include <QTimer>
 
 controlWidget::controlWidget(QWidget *parent) : QWidget(parent)
 {
@@ -206,6 +208,7 @@ void controlWidget::connectToSlots(){
     connect(pUndoButton,&QPushButton::clicked,this,&controlWidget::undo);
     connect(pRedoButton,&QPushButton::clicked,this,&controlWidget::redo);
     connect(pNOButton,&QPushButton::clicked,this,&controlWidget::quit);
+    connect(pOKButton,&QPushButton::clicked,this,&controlWidget::shot);
 }
 
 void controlWidget::rectButtonStatu(){
@@ -583,6 +586,22 @@ void controlWidget::redo(){
             }
         }
     }
+}
+
+void controlWidget::shot(){
+    screenshotView::getInstance()->hideSelectRectHandles();
+
+    //等待rectHandles被隐藏了再截屏
+    QEventLoop loop;
+    QTimer::singleShot(0.0000000000000000000000000000000000000000000000000000000000000000000000000001, &loop, &QEventLoop::quit); //？？？？不加不行
+    loop.exec();
+
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRectF captureRect = QRectF(screenshotView::getInstance()->getSelectStart(),screenshotView::getInstance()->getSelectEnd());
+    QPixmap screenshot = screen->grabWindow(0,captureRect.x(),captureRect.y(),captureRect.width(),captureRect.height());
+    commandManager::getInstance()->screenshots.append(screenshot);
+    screenshotView::getInstance()->getCheck()->updateScreenshots();
+    commandManager::getInstance()->quit();
 }
 
 QRect controlWidget::getLocationRect(){

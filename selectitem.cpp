@@ -548,6 +548,11 @@ void selectItem::updateSelectPoints(){
     }
 }
 
+void selectItem::hideRectHandles(){
+    for(int i = 0;i < rectHandles.size();i++){
+        rectHandles[i]->hide();
+    }
+}
 
 
 

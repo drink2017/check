@@ -45,6 +45,8 @@ public:
 
     bool dragTotally = true;
 
+    QList<QPixmap> screenshots;
+
 private:
     static commandManager* instance;
     explicit commandManager(QObject *parent = nullptr);

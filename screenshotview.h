@@ -6,6 +6,7 @@
 #include "controlwidget.h"
 #include "myarrowitem.h"
 #include "command.h"
+#include "newcheck.h"
 
 #include <QGraphicsView>
 
@@ -38,6 +39,11 @@ public:
     myArrowItem* getCurrentArrowItem();
     QGraphicsPathItem* getCurrentPenItem();
 
+    void setCheck(newCheck* check);
+    newCheck* getCheck();
+
+    void hideSelectRectHandles();
+
 private:
     static screenshotView* instance;
 
@@ -68,6 +74,8 @@ private:
     bool focusOnNumber;
 
     command* pCommand;
+
+    newCheck* check;
 
     // QWidget interface
 protected:
