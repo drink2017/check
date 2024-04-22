@@ -37,6 +37,7 @@ SOURCES += \
     pencommand.cpp \
     rectcommand.cpp \
     redomanager.cpp \
+    screenshotlabel.cpp \
     screenshotview.cpp \
     selectcommand.cpp \
     selectitem.cpp \
@@ -67,6 +68,7 @@ HEADERS += \
     pencommand.h \
     rectcommand.h \
     redomanager.h \
+    screenshotlabel.h \
     screenshotview.h \
     selectcommand.h \
     selectitem.h \

@@ -2,9 +2,11 @@
 #include "ui_newcheck.h"
 #include "commandmanager.h"
 #include "screenshotview.h"
+#include "screenshotlabel.h"
 
 #include <QDateTime>
 #include <QDebug>
+#include <QMessageBox>
 
 newCheck::newCheck(QWidget *parent)
     : QWidget(parent)
@@ -13,13 +15,17 @@ newCheck::newCheck(QWidget *parent)
     ui->setupUi(this);
     setWindowTitle("校核");
     setFixedSize(633,652);
+    setWindowFlags(windowFlags() & ~Qt::WindowCloseButtonHint);
+
+    ui->label_screenshot->check = this;
 
     connect(ui->pushButton_clear,&QPushButton::clicked,this,&newCheck::slotOnClearButton);
     connect(ui->pushButton_delete,&QPushButton::clicked,this,&newCheck::slotOnDeleteButton);
     connect(ui->pushButton_re,&QPushButton::clicked,this,&newCheck::slotOnReButton);
     connect(ui->pushButton_begin,&QPushButton::clicked,this,&newCheck::slotOnBeginButton);
     connect(ui->pushButton_sign,&QPushButton::clicked,this,&newCheck::slotOnSignButton);
-    connect(ui->verticalScrollBar,&QScrollBar::valueChanged,this,&newCheck::changeScreenshot);
+    connect(ui->verticalScrollBar,&QScrollBar::valueChanged,ui->label_screenshot,&screenshotLabel::changeScreenshot);
+    connect(ui->pushButton_deleteAll,&QPushButton::clicked,this,&newCheck::slotOnDeleteAllButton);
 
     //签名icon
     QPixmap sign;
@@ -54,6 +60,7 @@ void newCheck::slotOnDeleteButton(){
         commandManager::getInstance()->screenshots.takeAt(commandManager::getInstance()->screenshotValue);
         if(commandManager::getInstance()->screenshotValue >= 1){
             commandManager::getInstance()->screenshotValue -= 1;
+            ui->verticalScrollBar->setValue(commandManager::getInstance()->screenshotValue);
         }
         updateScreenshots();
     }
@@ -93,35 +100,16 @@ void newCheck::updateScreenshots(){
     }
 }
 
-void newCheck::changeScreenshot(int value){
-    if(commandManager::getInstance()->screenshots.size() > 0){
-        QPixmap screenshot;
-        screenshot = commandManager::getInstance()->screenshots.at(value).scaled(ui->label_screenshot->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
-        ui->label_screenshot->setPixmap(screenshot);
+void newCheck::slotOnDeleteAllButton(){
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this,"confirmation","Are you sure you want to delete?",QMessageBox::Yes | QMessageBox::No);
+    if(reply == QMessageBox::Yes){
+        QWidget::close();
     }
 }
 
-void newCheck::wheelEvent(QWheelEvent *event)
-{
-    int numDegrees = event->angleDelta().y() / 8;
-    int numSteps = numDegrees / 15;
-
-    // 根据滚轮滚动方向更新当前显示的图片索引
-    int currentImageIndex = ui->verticalScrollBar->value();
-    currentImageIndex -= numSteps;
-
-    // 处理边界情况，确保图片索引在合法范围内
-    if (currentImageIndex < 0)
-        currentImageIndex = 0;
-    else if (currentImageIndex >= commandManager::getInstance()->screenshots.size())
-        currentImageIndex = commandManager::getInstance()->screenshots.size() - 1;
-
-    ui->verticalScrollBar->setValue(currentImageIndex);
-
-    // 在label中显示对应索引的图片
-    changeScreenshot(currentImageIndex);
-
-    event->accept();
+Ui::newCheck* newCheck::getUi(){
+    return ui;
 }
 
 

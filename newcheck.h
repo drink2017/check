@@ -15,6 +15,8 @@ public:
     newCheck(QWidget *parent = nullptr);
     ~newCheck();
 
+    Ui::newCheck* getUi();
+
 private:
     Ui::newCheck *ui;
 
@@ -25,10 +27,6 @@ public slots:
     void slotOnBeginButton();
     void slotOnSignButton();
     void updateScreenshots();
-    void changeScreenshot(int value);
-
-    // QWidget interface
-protected:
-    void wheelEvent(QWheelEvent *event) override;
+    void slotOnDeleteAllButton();
 };
 #endif // NEWCHECK_H

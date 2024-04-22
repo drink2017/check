@@ -32,7 +32,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="label_screenshot">
+  <widget class="screenshotLabel" name="label_screenshot">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -386,6 +386,13 @@
    </property>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>screenshotLabel</class>
+   <extends>QLabel</extends>
+   <header>screenshotlabel.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
