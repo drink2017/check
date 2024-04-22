@@ -10,6 +10,11 @@
 
 #include <QGraphicsView>
 
+enum shotType{
+    newShot,
+    replace
+};
+
 class screenshotView : public QGraphicsView
 {
     Q_OBJECT
@@ -43,6 +48,10 @@ public:
     newCheck* getCheck();
 
     void hideSelectRectHandles();
+
+    shotType type;
+    void setType(shotType type);
+    shotType getType();
 
 private:
     static screenshotView* instance;

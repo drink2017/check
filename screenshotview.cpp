@@ -226,6 +226,14 @@ void screenshotView::hideSelectRectHandles(){
     currentSelectItem->hideRectHandles();
 }
 
+void screenshotView::setType(shotType type){
+    this->type = type;
+}
+
+shotType screenshotView::getType(){
+    return type;
+}
+
 
 
 

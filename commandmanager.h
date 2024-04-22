@@ -47,6 +47,8 @@ public:
 
     QList<QPixmap> screenshots;
 
+    int screenshotValue;
+
 private:
     static commandManager* instance;
     explicit commandManager(QObject *parent = nullptr);

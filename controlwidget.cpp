@@ -599,7 +599,11 @@ void controlWidget::shot(){
     QScreen *screen = QGuiApplication::primaryScreen();
     QRectF captureRect = QRectF(screenshotView::getInstance()->getSelectStart(),screenshotView::getInstance()->getSelectEnd());
     QPixmap screenshot = screen->grabWindow(0,captureRect.x(),captureRect.y(),captureRect.width(),captureRect.height());
-    commandManager::getInstance()->screenshots.append(screenshot);
+    if(screenshotView::getInstance()->getType() == shotType::newShot){
+        commandManager::getInstance()->screenshots.append(screenshot);
+    }else if(screenshotView::getInstance()->getType() == shotType::replace){
+        commandManager::getInstance()->screenshots.replace(commandManager::getInstance()->screenshotValue,screenshot);
+    }
     screenshotView::getInstance()->getCheck()->updateScreenshots();
     commandManager::getInstance()->quit();
 }

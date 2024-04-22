@@ -19,6 +19,9 @@ private:
     Ui::newCheck *ui;
 
 public slots:
+    void slotOnClearButton();
+    void slotOnDeleteButton();
+    void slotOnReButton();
     void slotOnBeginButton();
     void slotOnSignButton();
     void updateScreenshots();

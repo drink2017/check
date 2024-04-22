@@ -14,6 +14,9 @@ newCheck::newCheck(QWidget *parent)
     setWindowTitle("校核");
     setFixedSize(633,652);
 
+    connect(ui->pushButton_clear,&QPushButton::clicked,this,&newCheck::slotOnClearButton);
+    connect(ui->pushButton_delete,&QPushButton::clicked,this,&newCheck::slotOnDeleteButton);
+    connect(ui->pushButton_re,&QPushButton::clicked,this,&newCheck::slotOnReButton);
     connect(ui->pushButton_begin,&QPushButton::clicked,this,&newCheck::slotOnBeginButton);
     connect(ui->pushButton_sign,&QPushButton::clicked,this,&newCheck::slotOnSignButton);
     connect(ui->verticalScrollBar,&QScrollBar::valueChanged,this,&newCheck::changeScreenshot);
@@ -26,7 +29,7 @@ newCheck::newCheck(QWidget *parent)
     }
 
     //截图显示
-    ui->label_screenshot->setText("未有照片");
+    ui->label_screenshot->setText("未有截图");
 
     //拉动条
     QString styleSheet = "QScrollBar { background-color: gray; }";
@@ -40,8 +43,34 @@ newCheck::~newCheck()
     delete ui;
 }
 
+void newCheck::slotOnClearButton(){
+    commandManager::getInstance()->screenshots.clear();
+    updateScreenshots();
+}
+
+void newCheck::slotOnDeleteButton(){
+    if(!commandManager::getInstance()->screenshots.isEmpty()){
+        commandManager::getInstance()->screenshotValue = ui->verticalScrollBar->value();
+        commandManager::getInstance()->screenshots.takeAt(commandManager::getInstance()->screenshotValue);
+        if(commandManager::getInstance()->screenshotValue >= 1){
+            commandManager::getInstance()->screenshotValue -= 1;
+        }
+        updateScreenshots();
+    }
+}
+
+void newCheck::slotOnReButton(){
+    screenshotView* w = screenshotView::getInstance();
+    commandManager::getInstance()->screenshotValue = ui->verticalScrollBar->value();
+    w->setType(shotType::replace);
+    w->setCheck(this);
+    w->show();
+}
+
 void newCheck::slotOnBeginButton(){
     screenshotView* w = screenshotView::getInstance();
+    commandManager::getInstance()->screenshotValue = ui->verticalScrollBar->value();
+    w->setType(shotType::newShot);
     w->setCheck(this);
     w->show();
 }
@@ -59,7 +88,7 @@ void newCheck::updateScreenshots(){
     if(commandManager::getInstance()->screenshots.size() == 0){
         ui->label_screenshot->setText("未有照片");
     }else{
-        screenshot = commandManager::getInstance()->screenshots.first().scaled(ui->label_screenshot->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+        screenshot = commandManager::getInstance()->screenshots.at(commandManager::getInstance()->screenshotValue).scaled(ui->label_screenshot->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
         ui->label_screenshot->setPixmap(screenshot);
     }
 }
@@ -94,3 +123,12 @@ void newCheck::wheelEvent(QWheelEvent *event)
 
     event->accept();
 }
+
+
+
+
+
+
+
+
+
