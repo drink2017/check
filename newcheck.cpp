@@ -7,6 +7,7 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QMessageBox>
+#include <QThread>
 
 newCheck::newCheck(QWidget *parent)
     : QWidget(parent)
@@ -67,18 +68,26 @@ void newCheck::slotOnDeleteButton(){
 }
 
 void newCheck::slotOnReButton(){
-    screenshotView* w = screenshotView::getInstance();
-    commandManager::getInstance()->screenshotValue = ui->verticalScrollBar->value();
-    w->setType(shotType::replace);
-    w->setCheck(this);
-    w->show();
+    if(!commandManager::getInstance()->screenshots.isEmpty()){
+        showMinimized();
+        QThread::msleep(250);
+        screenshotView* w = screenshotView::getInstance();
+        commandManager::getInstance()->screenshotValue = ui->verticalScrollBar->value();
+        w->setType(shotType::replace);
+        w->setCheck(this);
+        w->setWindowState(Qt::WindowActive);
+        w->show();
+    }
 }
 
 void newCheck::slotOnBeginButton(){
+    showMinimized();
+    QThread::msleep(250);
     screenshotView* w = screenshotView::getInstance();
     commandManager::getInstance()->screenshotValue = ui->verticalScrollBar->value();
     w->setType(shotType::newShot);
     w->setCheck(this);
+    w->setWindowState(Qt::WindowActive);
     w->show();
 }
 
@@ -87,13 +96,19 @@ void newCheck::slotOnSignButton(){
     QString currentTime = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
     ui->label_current->setText(currentTime);
     ui->pushButton_sign->setEnabled(false);
+    ui->pushButton_re->setEnabled(false);
+    ui->pushButton_begin->setEnabled(false);
+    ui->pushButton_delete->setEnabled(false);
+    ui->pushButton_clear->setEnabled(false);
+    ui->lineEdit_topic->setEnabled(false);
+    ui->textEdit->setEnabled(false);
 }
 
 void newCheck::updateScreenshots(){
     ui->verticalScrollBar->setRange(0,commandManager::getInstance()->screenshots.size() - 1);
     QPixmap screenshot;
     if(commandManager::getInstance()->screenshots.size() == 0){
-        ui->label_screenshot->setText("未有照片");
+        ui->label_screenshot->setText("未有截图");
     }else{
         screenshot = commandManager::getInstance()->screenshots.at(commandManager::getInstance()->screenshotValue).scaled(ui->label_screenshot->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
         ui->label_screenshot->setPixmap(screenshot);

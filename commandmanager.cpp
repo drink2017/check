@@ -2,6 +2,7 @@
 #include "screenshotview.h"
 
 #include <QApplication>
+#include <QDebug>
 
 commandManager* commandManager::instance = nullptr;
 
@@ -149,6 +150,7 @@ void commandManager::quit(){
     delete screenshotView::getInstance()->getControl()->myColorWidget;
     delete screenshotView::getInstance()->getControl()->myTextWidget;
     delete screenshotView::getInstance()->getInfo();
+    screenshotView::getInstance()->getCheck()->showNormal();
     screenshotView::releaseInstance();
 
     selectingArea = true;
