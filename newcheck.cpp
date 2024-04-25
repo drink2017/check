@@ -9,6 +9,13 @@
 #include <QMessageBox>
 #include <QThread>
 
+#include <QPdfWriter>
+#include <QtPrintSupport/QPrinter>
+#include <QBuffer>
+#include <QDesktopServices>
+#include <QFileDialog>
+#include <QTextDocument>
+
 newCheck::newCheck(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::newCheck)
@@ -26,14 +33,17 @@ newCheck::newCheck(QWidget *parent)
     connect(ui->pushButton_begin,&QPushButton::clicked,this,&newCheck::slotOnBeginButton);
     connect(ui->pushButton_sign,&QPushButton::clicked,this,&newCheck::slotOnSignButton);
     connect(ui->verticalScrollBar,&QScrollBar::valueChanged,ui->label_screenshot,&screenshotLabel::changeScreenshot);
+    connect(ui->pushButton_save,&QPushButton::clicked,this,&newCheck::slotOnSaveButton);
     connect(ui->pushButton_deleteAll,&QPushButton::clicked,this,&newCheck::slotOnDeleteAllButton);
+    connect(ui->pushButton_preview,&QPushButton::clicked,this,&newCheck::slotOnPreviewButton);
+    connect(ui->pushButton_export,&QPushButton::clicked,this,&newCheck::slotOnExportButton);
 
-    //签名icon
-    QPixmap sign;
-    if(sign.load("C:\\Users\\drink water\\Pictures\\微信头像.jpg")){
-        ui->label_sign->setPixmap(sign);
-        ui->label_sign->setScaledContents(true);
-    }
+//    //签名icon
+//    QPixmap sign;
+//    if(sign.load("C:\\Users\\drink water\\Pictures\\微信头像.jpg")){
+//        ui->label_sign->setPixmap(sign);
+//        ui->label_sign->setScaledContents(true);
+//    }
 
     //截图显示
     ui->label_screenshot->setText("未有截图");
@@ -92,6 +102,12 @@ void newCheck::slotOnBeginButton(){
 }
 
 void newCheck::slotOnSignButton(){
+    QPixmap sign;
+    if(sign.load("C:\\Users\\drink water\\Pictures\\微信头像.jpg")){
+        ui->label_sign->setPixmap(sign);
+        ui->label_sign->setScaledContents(true);
+    }
+
     QDateTime currentDateTime = QDateTime::currentDateTime();
     QString currentTime = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
     ui->label_current->setText(currentTime);
@@ -102,6 +118,78 @@ void newCheck::slotOnSignButton(){
     ui->pushButton_clear->setEnabled(false);
     ui->lineEdit_topic->setEnabled(false);
     ui->textEdit->setEnabled(false);
+}
+
+struct info{
+    QString basicInfo;
+    QString topic;
+    QString checkMan;
+    QString checkTime;
+    QList<QPixmap> screenshots;
+    QString illustrate;
+};
+
+void newCheck::slotOnSaveButton(){
+    info myInfo;
+    myInfo.basicInfo = ui->label_basic->text();
+    myInfo.topic = ui->label_topic->text();
+    myInfo.checkMan = ui->label_name->text();
+    myInfo.checkTime = ui->label_time->text();
+    myInfo.screenshots = commandManager::getInstance()->screenshots;
+    myInfo.illustrate = ui->textEdit->toPlainText();
+}
+
+void newCheck::slotOnPreviewButton(){
+    //QByteArray pdfData;
+    //QBuffer buffer(&pdfData);
+    //buffer.open(QIODevice::ReadWrite);
+
+    QString filePath = "output.pdf";
+    QPdfWriter pdfWriter(filePath);
+    //QPdfWriter pdfWriter(&buffer);
+    pdfWriter.setPageSize(QPageSize(QPageSize::A4));
+    pdfWriter.setResolution(300);
+    pdfWriter.setPageMargins(QMargins(30, 30, 30, 30));
+
+    QPainter painter(&pdfWriter);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    int currentPage = 0;
+
+    for(const QPixmap& pixmap : commandManager::getInstance()->screenshots){
+        if(currentPage != 0){
+            pdfWriter.newPage();
+            currentPage += 1;
+        }else{
+            currentPage += 1;
+        }
+        painter.drawPixmap(painter.viewport(), pixmap,pixmap.rect());
+    }
+
+    //buffer.close();
+
+    //QPrinter printer;
+
+    QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
+}
+
+void newCheck::slotOnExportButton(){
+    QString filePath = QFileDialog::getSaveFileName(this, QStringLiteral("导出QGradient预设值"), QString(), "*.pdf");
+    if (filePath.isEmpty()) {
+        return;
+    }
+    QPdfWriter pdfWriter(filePath);
+    pdfWriter.setPageSize(QPageSize(QPageSize::A4));
+    pdfWriter.setResolution(300);
+    pdfWriter.setPageMargins(QMargins(30, 30, 30, 30));
+
+    QPainter painter(&pdfWriter);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    for(const QPixmap& pixmap : commandManager::getInstance()->screenshots){
+        painter.drawPixmap(painter.viewport(), pixmap,pixmap.rect());
+        //pdfWriter.newPage();
+    }
 }
 
 void newCheck::updateScreenshots(){
