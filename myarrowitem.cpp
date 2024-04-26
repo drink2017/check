@@ -1,3 +1,5 @@
+﻿#define _USE_MATH_DEFINES
+
 #include "myarrowitem.h"
 #include "screenshotview.h"
 #include "commandmanager.h"

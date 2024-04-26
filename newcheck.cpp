@@ -140,13 +140,12 @@ void newCheck::slotOnSaveButton(){
 }
 
 void newCheck::slotOnPreviewButton(){
-    //QByteArray pdfData;
-    //QBuffer buffer(&pdfData);
-    //buffer.open(QIODevice::ReadWrite);
+    QByteArray byteArray;
+    QBuffer buffer(&byteArray);
+    buffer.open(QIODevice::WriteOnly);
 
     QString filePath = "output.pdf";
-    QPdfWriter pdfWriter(filePath);
-    //QPdfWriter pdfWriter(&buffer);
+    QPdfWriter pdfWriter(&buffer);
     pdfWriter.setPageSize(QPageSize(QPageSize::A4));
     pdfWriter.setResolution(300);
     pdfWriter.setPageMargins(QMargins(30, 30, 30, 30));
@@ -163,10 +162,10 @@ void newCheck::slotOnPreviewButton(){
         }else{
             currentPage += 1;
         }
-        painter.drawPixmap(painter.viewport(), pixmap,pixmap.rect());
+        painter.drawPixmap(pixmap.rect(), pixmap,pixmap.rect());
     }
 
-    //buffer.close();
+    buffer.close();
 
     //QPrinter printer;
 
