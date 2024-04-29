@@ -133,7 +133,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>校核说明</string>
+    <string>校核说明：</string>
    </property>
   </widget>
   <widget class="QTextEdit" name="textEdit">

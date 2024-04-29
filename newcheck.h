@@ -1,8 +1,7 @@
-#ifndef NEWCHECK_H
+﻿#ifndef NEWCHECK_H
 #define NEWCHECK_H
 
 #include <QWidget>
-#include <QPrintPreviewWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class newCheck; }
@@ -21,7 +20,7 @@ public:
 private:
     Ui::newCheck *ui;
 
-    QPrintPreviewWidget printPreviewWidget;
+    void generatePDF(QString filePath);
 
 public slots:
     void slotOnClearButton();

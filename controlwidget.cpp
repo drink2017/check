@@ -1,4 +1,4 @@
-#include "controlwidget.h"
+﻿#include "controlwidget.h"
 #include "screenshotview.h"
 #include "undomanager.h"
 #include "redomanager.h"
@@ -590,6 +590,10 @@ void controlWidget::redo(){
 
 void controlWidget::shot(){
     screenshotView::getInstance()->hideSelectRectHandles();
+    screenshotView::getInstance()->getInfo()->hide();
+    screenshotView::getInstance()->getControl()->hide();
+    screenshotView::getInstance()->getControl()->myTextWidget->hide();
+    screenshotView::getInstance()->getControl()->myColorWidget->hide();
 
     //等待rectHandles被隐藏了再截屏
     QEventLoop loop;

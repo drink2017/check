@@ -280,7 +280,7 @@ void newCheck::generatePDF(QString filePath){
             }
         }
 
-        text = "签字";
+        text = "签字:";
         textRect = painter.fontMetrics().boundingRect(text);
         if(y + textRect.height() >= printer.pageRect().height()){
             printer.newPage();
