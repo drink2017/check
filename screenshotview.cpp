@@ -1,4 +1,4 @@
-#include "screenshotview.h"
+﻿#include "screenshotview.h"
 #include "commandmanager.h"
 #include "mytextitem.h"
 #include "mynumberitem.h"
@@ -233,6 +233,13 @@ void screenshotView::setType(shotType type){
 shotType screenshotView::getType(){
     return type;
 }
+
+void screenshotView::wheelEvent(QWheelEvent *event)
+{
+    (void)event;
+}
+
+
 
 
 

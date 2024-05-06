@@ -31,7 +31,6 @@ public slots:
     void updateScreenshots();
     void slotOnSaveButton();
     void slotOnDeleteAllButton();
-    void slotOnPreviewButton();
     void slotOnExportButton();
 };
 #endif // NEWCHECK_H

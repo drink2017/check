@@ -8,11 +8,9 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QThread>
-
 #include <QtPrintSupport/QPrinter>
 #include <QDesktopServices>
 #include <QFileDialog>
-#include <QTextItem>
 
 newCheck::newCheck(QWidget *parent)
     : QWidget(parent)
@@ -20,7 +18,7 @@ newCheck::newCheck(QWidget *parent)
 {
     ui->setupUi(this);
     setWindowTitle("校核");
-    setFixedSize(633,652);
+    setFixedSize(631,757);
     setWindowFlags(windowFlags() & ~Qt::WindowCloseButtonHint);
 
     ui->label_screenshot->check = this;
@@ -33,7 +31,6 @@ newCheck::newCheck(QWidget *parent)
     connect(ui->verticalScrollBar,&QScrollBar::valueChanged,ui->label_screenshot,&screenshotLabel::changeScreenshot);
     connect(ui->pushButton_save,&QPushButton::clicked,this,&newCheck::slotOnSaveButton);
     connect(ui->pushButton_deleteAll,&QPushButton::clicked,this,&newCheck::slotOnDeleteAllButton);
-    connect(ui->pushButton_preview,&QPushButton::clicked,this,&newCheck::slotOnPreviewButton);
     connect(ui->pushButton_export,&QPushButton::clicked,this,&newCheck::slotOnExportButton);
 
     //截图显示
@@ -132,14 +129,6 @@ void newCheck::slotOnSaveButton(){
     myInfo.illustrate = ui->textEdit->toPlainText();
 }
 
-void newCheck::slotOnPreviewButton(){
-    QString filePath = "output.pdf";
-
-    generatePDF(filePath);
-
-    QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
-}
-
 void newCheck::slotOnExportButton(){
     QString filePath = QFileDialog::getSaveFileName(this, "Export PDF", QDir::homePath(), "PDF Files (*.pdf)");
     if (filePath.isEmpty()) {
@@ -197,7 +186,7 @@ void newCheck::generatePDF(QString filePath){
         painter. drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
 
         x = 100;
-        y = y + textRect.height() + 100;
+        y = y + textRect.height() + 50;
         text = ui->label_topic->text();
         textRect = painter.fontMetrics().boundingRect(text);
         painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
@@ -207,7 +196,7 @@ void newCheck::generatePDF(QString filePath){
         painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
 
         x = 100;
-        y = y + textRect.height() + 300;
+        y = y + textRect.height() + 250;
         text = ui->label_check->text();
         textRect = painter.fontMetrics().boundingRect(text);
         painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
@@ -226,7 +215,7 @@ void newCheck::generatePDF(QString filePath){
         painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
 
         x = 100;
-        y = y + textRect.height() + 300;
+        y = y + textRect.height() + 600;
         foreach(QPixmap pixmap,commandManager::getInstance()->screenshots){
             int ratioWid = printer.pageRect().width()/pixmap.width();
             int ratioHei = (printer.pageRect().height() - y)/pixmap.height();
@@ -240,63 +229,67 @@ void newCheck::generatePDF(QString filePath){
             }
         }
 
-        text = ui->label->text();
-        textRect = painter.fontMetrics().boundingRect(text);
-        if(y + textRect.height() > printer.pageRect().height()){
-            printer.newPage();
-            y = 100;
-        }
-        painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
+        if(!ui->textEdit->toPlainText().isEmpty()){
+            text = ui->label->text();
+            textRect = painter.fontMetrics().boundingRect(text);
+            if(y + textRect.height() > printer.pageRect().height()){
+                printer.newPage();
+                y = 100;
+            }
+            painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
 
-        y = y + textRect.height() + 300;
-        text = ui->textEdit->toPlainText();
-        QStringList lines = text.split("\n");
-        QFontMetrics metrics(painter.font());
-        int lineHeight = metrics.height();
-        for(const QString& line : lines){
-            QStringList words = line.split("");
-            QString currentLine;
-            for(const QString& word : words){
-                int width = metrics.horizontalAdvance(currentLine + word + " ");
-                if(width > printer.pageRect().width()){
+            y = y + textRect.height() + 300;
+            text = ui->textEdit->toPlainText();
+            QStringList lines = text.split("\n");
+            QFontMetrics metrics(painter.font());
+            int lineHeight = metrics.height();
+            for(const QString& line : lines){
+                QStringList words = line.split("");
+                QString currentLine;
+                for(const QString& word : words){
+                    int width = metrics.horizontalAdvance(currentLine + word + " ");
+                    if(width > printer.pageRect().width()){
+                        if(y + lineHeight >= printer.pageRect().height()){
+                            y = 100;
+                            printer.newPage();
+                        }
+                        painter.drawText(x,y,printer.pageRect().width(),lineHeight,Qt::AlignLeft,currentLine);
+                        y = y + lineHeight + 100;
+                        currentLine.clear();
+                    }
+                    currentLine += word;
+                }
+
+                if(!currentLine.isEmpty()){
                     if(y + lineHeight >= printer.pageRect().height()){
                         y = 100;
                         printer.newPage();
                     }
                     painter.drawText(x,y,printer.pageRect().width(),lineHeight,Qt::AlignLeft,currentLine);
                     y = y + lineHeight + 100;
-                    currentLine.clear();
                 }
-                currentLine += word;
             }
+        }
 
-            if(!currentLine.isEmpty()){
-                if(y + lineHeight >= printer.pageRect().height()){
+        if(!ui->pushButton_sign->isEnabled()){
+            text = "签字:";
+            textRect = painter.fontMetrics().boundingRect(text);
+            if(y + textRect.height() >= printer.pageRect().height()){
+                printer.newPage();
+                y = 100;
+            }
+            painter.drawText(x,y,textRect.width(),textRect.height(),Qt::AlignLeft,text);
+
+            y = y + textRect.height() + 300;
+            QPixmap sign;
+            if(sign.load("C:\\Users\\drink water\\Pictures\\微信头像.jpg") && !ui->pushButton_sign->isEnabled()){
+                QRect pixmapRect = QRect(x,y,sign.width(),sign.height());
+                if(y + pixmapRect.height() >= printer.pageRect().height()){
                     y = 100;
                     printer.newPage();
                 }
-                painter.drawText(x,y,printer.pageRect().width(),lineHeight,Qt::AlignLeft,currentLine);
-                y = y + lineHeight + 100;
+                painter.drawPixmap(pixmapRect,sign);
             }
-        }
-
-        text = "签字";
-        textRect = painter.fontMetrics().boundingRect(text);
-        if(y + textRect.height() >= printer.pageRect().height()){
-            printer.newPage();
-            y = 100;
-        }
-        painter.drawText(x,y,textRect.width(),textRect.height(),Qt::AlignLeft,text);
-
-        y = y + textRect.height() + 300;
-        QPixmap sign;
-        if(sign.load("C:\\Users\\drink water\\Pictures\\微信头像.jpg") && !ui->pushButton_sign->isEnabled()){
-            QRect pixmapRect = QRect(x,y,sign.width(),sign.height());
-            if(y + pixmapRect.height() >= printer.pageRect().height()){
-                y = 100;
-                printer.newPage();
-            }
-            painter.drawPixmap(pixmapRect,sign);
         }
 
         painter.end();

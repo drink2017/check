@@ -1,4 +1,4 @@
-#ifndef SCREENSHOTVIEW_H
+﻿#ifndef SCREENSHOTVIEW_H
 #define SCREENSHOTVIEW_H
 
 #include "selectitem.h"
@@ -91,6 +91,7 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
+    void wheelEvent(QWheelEvent *event) override;
 };
 
 #endif // SCREENSHOTVIEW_H
