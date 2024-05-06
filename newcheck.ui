@@ -178,7 +178,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>保存</string>
+    <string>确定</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_deleteAll">
