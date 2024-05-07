@@ -118,7 +118,7 @@ void controlWidget::setButtons(){
     pRectButton->setToolTip("矩形");
     pRectButton->setCheckable(true);
     pRectButton->setChecked(false);
-    QIcon rectIcon("E:\\software\\qt\\qtProjects\\screenshot3\\icon\\rectangle.png");
+    QIcon rectIcon(":/icons/controlWidget/rectangle.png");
     pRectButton->setIcon(rectIcon);
 
     pRoundButton = new QPushButton(this);
@@ -126,7 +126,7 @@ void controlWidget::setButtons(){
     pRoundButton->setFixedSize(QSize(32,32));
     pRoundButton->setCheckable(true);
     pRoundButton->setChecked(false);
-    QIcon roundIcon("E:\\software\\qt\\qtProjects\\screenshot3\\icon\\dry-clean.png");
+    QIcon roundIcon(":/icons/controlWidget/ellipse.png");
     pRoundButton->setIcon(roundIcon);
 
     pArrowButton = new QPushButton(this);
@@ -134,7 +134,7 @@ void controlWidget::setButtons(){
     pArrowButton->setToolTip("箭头");
     pArrowButton->setCheckable(true);
     pArrowButton->setChecked(false);
-    QIcon arrowIcon("E:\\software\\qt\\qtProjects\\screenshot3\\icon\\right-arrow.png");
+    QIcon arrowIcon(":/icons/controlWidget/arrow.png");
     pArrowButton->setIcon(arrowIcon);
 
     pPenButton = new QPushButton(this);
@@ -142,7 +142,7 @@ void controlWidget::setButtons(){
     pPenButton->setToolTip("画笔");
     pPenButton->setCheckable(true);
     pPenButton->setChecked(false);
-    QIcon penIcon("E:\\software\\qt\\qtProjects\\screenshot3\\icon\\pen.png");
+    QIcon penIcon(":/icons/controlWidget/pen.png");
     pPenButton->setIcon(penIcon);
 
     pTextButton = new QPushButton;
@@ -150,7 +150,7 @@ void controlWidget::setButtons(){
     pTextButton->setToolTip("文字");
     pTextButton->setCheckable(true);
     pTextButton->setChecked(false);
-    QIcon textIcon("E:\\software\\qt\\qtProjects\\screenshot3\\icon\\text.png");
+    QIcon textIcon(":/icons/controlWidget/text.png");
     pTextButton->setIcon(textIcon);
 
     pSerialButton = new QPushButton;
@@ -158,19 +158,19 @@ void controlWidget::setButtons(){
     pSerialButton->setToolTip("序号笔");
     pSerialButton->setCheckable(true);
     pSerialButton->setChecked(false);
-    QIcon serialIcon("E:\\software\\qt\\qtProjects\\screenshot2\\icon\\serial.png");
+    QIcon serialIcon(":/icons/controlWidget/serial.png");
     pSerialButton->setIcon(serialIcon);
 
     pUndoButton = new QPushButton;
     pUndoButton->setFixedSize(QSize(32,32));
     pUndoButton->setToolTip("撤销");
-    QIcon undoIcon = QApplication::style()->standardIcon(QStyle::SP_ArrowBack);
+    QIcon undoIcon(":/icons/controlWidget/undo.png");
     pUndoButton->setIcon(undoIcon);
 
     pRedoButton = new QPushButton;
     pRedoButton->setToolTip("重做");
     pRedoButton->setFixedSize(QSize(32,32));
-    QIcon redoIcon = QApplication::style()->standardIcon(QStyle::SP_ArrowForward);
+    QIcon redoIcon(":/icons/controlWidget/redo.png");
     pRedoButton->setIcon(redoIcon);
 
     pNOButton = new QPushButton;
@@ -181,9 +181,9 @@ void controlWidget::setButtons(){
 
     pOKButton = new QPushButton;
     pOKButton->setFixedSize(QSize(32,32));
-    QIcon okIcon = QApplication::style()->standardIcon(QStyle::SP_DialogApplyButton);
+    QIcon okIcon(":/icons/controlWidget/ok.png");
     pOKButton->setIcon(okIcon);
-    pOKButton->setToolTip("复制到剪贴板");
+    pOKButton->setToolTip("确认截图");
 }
 
 void controlWidget::addButtonsToLayout(){

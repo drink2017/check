@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/icon/undo"/>
+    <qresource prefix="/icon"/>
+    <qresource prefix="/">
+        <file>D:/Users/drink water/Downloads/undo.png</file>
+    </qresource>
+</RCC>

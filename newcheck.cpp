@@ -23,6 +23,22 @@ newCheck::newCheck(QWidget *parent)
 
     ui->label_screenshot->check = this;
 
+    QIcon beginScreenshot(":/icons/newCheck/beginScreenshot.png");
+    ui->pushButton_begin->setIcon(beginScreenshot);
+    ui->pushButton_begin->setToolTip("开始截图");
+
+    QIcon deleteScreenshot(":/icons/newCheck/delete.png");
+    ui->pushButton_delete->setIcon(deleteScreenshot);
+    ui->pushButton_delete->setToolTip("删除截图");
+
+    QIcon replaceScreenshot(":/icons/newCheck/replace.png");
+    ui->pushButton_re->setIcon(replaceScreenshot);
+    ui->pushButton_re->setToolTip("重新截图");
+
+    QIcon clearScreenshot(":/icons/newCheck/clear.png");
+    ui->pushButton_clear->setIcon(clearScreenshot);
+    ui->pushButton_clear->setToolTip("清空截图");
+
     connect(ui->pushButton_clear,&QPushButton::clicked,this,&newCheck::slotOnClearButton);
     connect(ui->pushButton_delete,&QPushButton::clicked,this,&newCheck::slotOnDeleteButton);
     connect(ui->pushButton_re,&QPushButton::clicked,this,&newCheck::slotOnReButton);

@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/icons/controlWidget"/>
+    <qresource prefix="/icons/newCheck"/>
+    <qresource prefix="/">
+        <file>icons/controlWidget/arrow.png</file>
+        <file>icons/controlWidget/ellipse.png</file>
+        <file>icons/controlWidget/ok.png</file>
+        <file>icons/controlWidget/pen.png</file>
+        <file>icons/controlWidget/rectangle.png</file>
+        <file>icons/controlWidget/redo.png</file>
+        <file>icons/controlWidget/serial.png</file>
+        <file>icons/controlWidget/text.png</file>
+        <file>icons/controlWidget/undo.png</file>
+        <file>icons/newCheck/beginScreenshot.png</file>
+        <file>icons/newCheck/delete.png</file>
+        <file>icons/newCheck/replace.png</file>
+        <file>icons/newCheck/clear.png</file>
+    </qresource>
+</RCC>

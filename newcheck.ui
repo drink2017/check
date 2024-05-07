@@ -90,7 +90,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>删除截图</string>
+    <string/>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_re">
@@ -103,7 +103,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>重新截图</string>
+    <string/>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_begin">
@@ -116,7 +116,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>开始截图</string>
+    <string/>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_clear">
@@ -129,7 +129,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>清空</string>
+    <string/>
    </property>
   </widget>
   <widget class="QLabel" name="label">

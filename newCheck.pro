@@ -94,3 +94,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     newCheck.pro.user
+
+RESOURCES += \
+    icon.qrc
