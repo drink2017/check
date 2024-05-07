@@ -1,4 +1,4 @@
-#ifndef COMMANDMANAGER_H
+﻿#ifndef COMMANDMANAGER_H
 #define COMMANDMANAGER_H
 
 #include <QObject>
@@ -46,6 +46,7 @@ public:
     bool dragTotally = true;
 
     QList<QPixmap> screenshots;
+    QList<QString> headlines;
 
     int screenshotValue;
 

@@ -18,7 +18,7 @@ newCheck::newCheck(QWidget *parent)
 {
     ui->setupUi(this);
     setWindowTitle("校核");
-    setFixedSize(631,757);
+    setFixedSize(631,773);
     setWindowFlags(windowFlags() & ~Qt::WindowCloseButtonHint);
 
     ui->label_screenshot->check = this;
@@ -52,6 +52,7 @@ newCheck::~newCheck()
 
 void newCheck::slotOnClearButton(){
     commandManager::getInstance()->screenshots.clear();
+    commandManager::getInstance()->headlines.clear();
     updateScreenshots();
 }
 
@@ -59,6 +60,7 @@ void newCheck::slotOnDeleteButton(){
     if(!commandManager::getInstance()->screenshots.isEmpty()){
         commandManager::getInstance()->screenshotValue = ui->verticalScrollBar->value();
         commandManager::getInstance()->screenshots.takeAt(commandManager::getInstance()->screenshotValue);
+        commandManager::getInstance()->headlines.takeAt(commandManager::getInstance()->screenshotValue);
         if(commandManager::getInstance()->screenshotValue >= 1){
             commandManager::getInstance()->screenshotValue -= 1;
             ui->verticalScrollBar->setValue(commandManager::getInstance()->screenshotValue);
@@ -142,9 +144,11 @@ void newCheck::updateScreenshots(){
     QPixmap screenshot;
     if(commandManager::getInstance()->screenshots.size() == 0){
         ui->label_screenshot->setText("未有截图");
+        ui->label_headline->setText("");
     }else{
         screenshot = commandManager::getInstance()->screenshots.at(commandManager::getInstance()->screenshotValue).scaled(ui->label_screenshot->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
         ui->label_screenshot->setPixmap(screenshot);
+        ui->label_headline->setText(commandManager::getInstance()->headlines.at(commandManager::getInstance()->screenshotValue));
     }
 }
 

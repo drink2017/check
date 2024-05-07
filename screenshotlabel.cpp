@@ -1,4 +1,4 @@
-#include "screenshotlabel.h"
+﻿#include "screenshotlabel.h"
 #include "commandmanager.h"
 #include "ui_newcheck.h"
 
@@ -39,6 +39,7 @@ void screenshotLabel::changeScreenshot(int value){
         QPixmap screenshot;
         screenshot = commandManager::getInstance()->screenshots.at(value).scaled(check->getUi()->label_screenshot->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
         check->getUi()->label_screenshot->setPixmap(screenshot);
+        check->getUi()->label_headline->setText(commandManager::getInstance()->headlines.at(value));
     }
 }
 

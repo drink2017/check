@@ -16,6 +16,7 @@
 #include <QStyle>
 #include <QDebug>
 #include <QTimer>
+#include <QDateTime>
 
 controlWidget::controlWidget(QWidget *parent) : QWidget(parent)
 {
@@ -605,8 +606,12 @@ void controlWidget::shot(){
     QPixmap screenshot = screen->grabWindow(0,captureRect.x(),captureRect.y(),captureRect.width(),captureRect.height());
     if(screenshotView::getInstance()->getType() == shotType::newShot){
         commandManager::getInstance()->screenshots.append(screenshot);
+        QDateTime currentDateTime = QDateTime::currentDateTime();
+        commandManager::getInstance()->headlines.append(currentDateTime.toString());
     }else if(screenshotView::getInstance()->getType() == shotType::replace){
         commandManager::getInstance()->screenshots.replace(commandManager::getInstance()->screenshotValue,screenshot);
+        QDateTime currentDateTime = QDateTime::currentDateTime();
+        commandManager::getInstance()->headlines.replace(commandManager::getInstance()->screenshotValue,currentDateTime.toString());
     }
     screenshotView::getInstance()->getCheck()->updateScreenshots();
     commandManager::getInstance()->quit();
