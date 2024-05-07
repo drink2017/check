@@ -1,4 +1,4 @@
-#include "selectcommand.h"
+﻿#include "selectcommand.h"
 #include "screenshotview.h"
 #include "commandmanager.h"
 

@@ -239,6 +239,22 @@ void screenshotView::wheelEvent(QWheelEvent *event)
     (void)event;
 }
 
+void screenshotView::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Escape){
+        commandManager::getInstance()->quit();
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

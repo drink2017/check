@@ -296,11 +296,9 @@ void newCheck::generatePDF(QString filePath){
     }
 }
 
-
-
-
-
-
-
-
-
+void newCheck::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Escape){
+        slotOnDeleteAllButton();
+    }
+}

@@ -32,5 +32,9 @@ public slots:
     void slotOnSaveButton();
     void slotOnDeleteAllButton();
     void slotOnExportButton();
+
+    // QWidget interface
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
 };
 #endif // NEWCHECK_H

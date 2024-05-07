@@ -1,4 +1,4 @@
-#include "commandmanager.h"
+﻿#include "commandmanager.h"
 #include "screenshotview.h"
 
 #include <QApplication>
@@ -147,12 +147,15 @@ void commandManager::disableDrawNumber(){
 }
 
 void commandManager::quit(){
-    delete screenshotView::getInstance()->getControl()->myColorWidget;
-    delete screenshotView::getInstance()->getControl()->myTextWidget;
-    delete screenshotView::getInstance()->getInfo();
+    if(screenshotView::getInstance()->getControl() && screenshotView::getInstance()->getInfo()){
+        delete screenshotView::getInstance()->getControl()->myColorWidget;
+        delete screenshotView::getInstance()->getControl()->myTextWidget;
+        delete screenshotView::getInstance()->getInfo();
+    }
     screenshotView::getInstance()->getCheck()->showNormal();
     screenshotView::releaseInstance();
 
+    //属性初始化
     selectingArea = true;
     drawingRect = false;
     editingItem = false;
