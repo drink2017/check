@@ -15,5 +15,6 @@
         <file>icons/newCheck/delete.png</file>
         <file>icons/newCheck/replace.png</file>
         <file>icons/newCheck/clear.png</file>
+        <file>icons/newCheck/main.png</file>
     </qresource>
 </RCC>

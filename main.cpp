@@ -1,4 +1,4 @@
-#include "newcheck.h"
+﻿#include "newcheck.h"
 
 #include <QApplication>
 

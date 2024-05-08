@@ -36,6 +36,8 @@ screenshotView::screenshotView()
     scene->addItem(currentPenItem);
 
     setRenderHint(QPainter::Antialiasing);
+
+    setCursor(Qt::CrossCursor);
 }
 
 screenshotView* screenshotView::getInstance(){

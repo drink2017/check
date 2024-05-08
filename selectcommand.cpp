@@ -37,6 +37,8 @@ void selectCommand::mouseReleaseCommand(QMouseEvent *event){
     screenshotView::getInstance()->setControl(new controlWidget(screenshotView::getInstance()));
     commandManager::getInstance()->connectToControlWidget();
     screenshotView::getInstance()->getControl()->show();
+
+    screenshotView::getInstance()->setCursor(Qt::ArrowCursor);
 }
 
 selectCommand::~selectCommand(){

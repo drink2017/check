@@ -16,6 +16,9 @@ newCheck::newCheck(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::newCheck)
 {
+    QIcon mainIcon(":/icons/newCheck/main.png");
+    setWindowIcon(mainIcon);
+
     ui->setupUi(this);
     setWindowTitle("校核");
     setFixedSize(631,773);

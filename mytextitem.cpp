@@ -1,4 +1,4 @@
-#include "mytextitem.h"
+﻿#include "mytextitem.h"
 #include "commandmanager.h"
 #include "screenshotview.h"
 #include "undomanager.h"
