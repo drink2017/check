@@ -7,7 +7,6 @@
 #include "mypenitem.h"
 #include "mytextitem.h"
 #include "mynumberitem.h"
-#include "newcheck.h"
 
 #include <commandmanager.h>
 #include <QGuiApplication>

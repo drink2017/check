@@ -24,7 +24,8 @@ check::check(QWidget *parent)
     font.setFamily("思源黑体");
     font.setPixelSize(13);
     this->setTitleFont(font);
-    setFixedSize(631,773);
+    //setFixedSize(631,773);
+    resize(631,773);
 
     QIcon mainIcon(":/icons/newCheck/main.png");
     setWindowIcon(mainIcon);
@@ -549,3 +550,27 @@ void check::closeEvent(QCloseEvent *event)
         messageBoxIsShowing = false;
     }
 }
+
+void check::resizeEvent(QResizeEvent *event)
+{
+    Q_UNUSED(event);
+    int currentImageIndex = commandManager::getInstance()->screenshots.size() - 1;
+    label_screenshot->changeScreenshot(currentImageIndex);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

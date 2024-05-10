@@ -1,9 +1,9 @@
 ﻿#include "screenshotlabel.h"
 #include "commandmanager.h"
-#include "ui_newcheck.h"
 
 #include <QWheelEvent>
 #include <QDebug>
+#include <QVBoxLayout>
 
 screenshotLabel::screenshotLabel(QWidget* parent) : QLabel(parent)
 {
