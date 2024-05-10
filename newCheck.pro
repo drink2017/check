@@ -38,7 +38,6 @@ SOURCES += \
     mypenitem.cpp \
     myrectitem.cpp \
     mytextitem.cpp \
-    newcheck.cpp \
     numbercommand.cpp \
     order.cpp \
     pencommand.cpp \
@@ -70,7 +69,6 @@ HEADERS += \
     mypenitem.h \
     myrectitem.h \
     mytextitem.h \
-    newcheck.h \
     numbercommand.h \
     order.h \
     pencommand.h \
@@ -86,8 +84,7 @@ HEADERS += \
     textwidget.h \
     undomanager.h
 
-FORMS += \
-    newcheck.ui
+FORMS +=
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -100,7 +97,7 @@ DISTFILES += \
 RESOURCES += \
     icon.qrc
 
-unix|win32: LIBS += -LD:/ModuleDependent/moduleui/lib/ -lModuleUId
+unix|win32: LIBS += -LE:/software/qt/qtProjects/newCheck/moduleui/lib/ -lModuleUId
 
-INCLUDEPATH += D:/ModuleDependent/moduleui/include
-DEPENDPATH += D:/ModuleDependent/moduleui/include
+INCLUDEPATH += E:/software/qt/qtProjects/newCheck/moduleui/include
+DEPENDPATH += E:/software/qt/qtProjects/newCheck/moduleui/include
