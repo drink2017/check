@@ -23,6 +23,7 @@ msvc {
 
 SOURCES += \
     arrowcommand.cpp \
+    check.cpp \
     colorwidget.cpp \
     command.cpp \
     commandmanager.cpp \
@@ -55,6 +56,7 @@ SOURCES += \
 
 HEADERS += \
     arrowcommand.h \
+    check.h \
     colorwidget.h \
     command.h \
     commandmanager.h \
@@ -97,3 +99,8 @@ DISTFILES += \
 
 RESOURCES += \
     icon.qrc
+
+unix|win32: LIBS += -LD:/ModuleDependent/moduleui/lib/ -lModuleUId
+
+INCLUDEPATH += D:/ModuleDependent/moduleui/include
+DEPENDPATH += D:/ModuleDependent/moduleui/include

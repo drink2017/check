@@ -2,12 +2,13 @@
 #define NEWCHECK_H
 
 #include <QWidget>
+#include "UiMainWindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class newCheck; }
 QT_END_NAMESPACE
 
-class newCheck : public QWidget
+class newCheck : public UiMainWindow
 {
     Q_OBJECT
 

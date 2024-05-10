@@ -6,7 +6,7 @@
 #include "controlwidget.h"
 #include "myarrowitem.h"
 #include "command.h"
-#include "newcheck.h"
+#include "check.h"
 
 #include <QGraphicsView>
 
@@ -44,8 +44,8 @@ public:
     myArrowItem* getCurrentArrowItem();
     QGraphicsPathItem* getCurrentPenItem();
 
-    void setCheck(newCheck* check);
-    newCheck* getCheck();
+    void setCheck(check* check);
+    check* getCheck();
 
     void hideSelectRectHandles();
 
@@ -84,7 +84,7 @@ private:
 
     command* pCommand;
 
-    newCheck* check;
+    check* myCheck;
 
     // QWidget interface
 protected:

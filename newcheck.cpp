@@ -13,18 +13,31 @@
 #include <QFileDialog>
 
 newCheck::newCheck(QWidget *parent)
-    : QWidget(parent)
+    : UiMainWindow(parent)
     , ui(new Ui::newCheck)
 {
+    //设置无边框
+      //FramelessHelper* helper = this->framelessHelper();
+      //设置样式
+      this->setStyle(UiMainWindow::UiStyle::Light);
+      //设置字体
+      QFont font;
+      font.setFamily("思源黑体");
+      font.setPixelSize(13);
+      this->setTitleFont(font);
+      setMinimumSize(800, 600);       //设置最小尺寸（最小尺寸大小待定）
+      setWindowState(Qt::WindowMaximized);//设定初始尺寸为“最大化”
+
+
     QIcon mainIcon(":/icons/newCheck/main.png");
     setWindowIcon(mainIcon);
 
     ui->setupUi(this);
     setWindowTitle("校核");
-    setFixedSize(631,773);
-    setWindowFlags(windowFlags() & ~Qt::WindowCloseButtonHint);
+    //setFixedSize(631,773);
+    //setWindowFlags(windowFlags() & ~Qt::WindowCloseButtonHint);
 
-    ui->label_screenshot->check = this;
+    //ui->label_screenshot->check = this;
 
     QIcon beginScreenshot(":/icons/newCheck/beginScreenshot.png");
     ui->pushButton_begin->setIcon(beginScreenshot);
@@ -95,7 +108,7 @@ void newCheck::slotOnReButton(){
         screenshotView* w = screenshotView::getInstance();
         commandManager::getInstance()->screenshotValue = ui->verticalScrollBar->value();
         w->setType(shotType::replace);
-        w->setCheck(this);
+        //w->setCheck(this);
         w->setWindowState(Qt::WindowActive);
         w->show();
     }
@@ -107,7 +120,7 @@ void newCheck::slotOnBeginButton(){
     screenshotView* w = screenshotView::getInstance();
     commandManager::getInstance()->screenshotValue = ui->verticalScrollBar->value();
     w->setType(shotType::newShot);
-    w->setCheck(this);
+    //w->setCheck(this);
     w->setWindowState(Qt::WindowActive);
     w->show();
 }
@@ -121,7 +134,7 @@ void newCheck::slotOnSignButton(){
 
     QDateTime currentDateTime = QDateTime::currentDateTime();
     QString currentTime = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
-    ui->label_current->setText(currentTime);
+    //ui->label_current->setText(currentTime);
     ui->pushButton_sign->setEnabled(false);
     ui->pushButton_re->setEnabled(false);
     ui->pushButton_begin->setEnabled(false);
@@ -142,9 +155,9 @@ struct info{
 
 void newCheck::slotOnSaveButton(){
     info myInfo;
-    myInfo.basicInfo = ui->label_basic->text();
+    //myInfo.basicInfo = ui->label_basic->text();
     myInfo.topic = ui->label_topic->text();
-    myInfo.checkMan = ui->label_name->text();
+    //myInfo.checkMan = ui->label_name->text();
     myInfo.checkTime = ui->label_time->text();
     myInfo.screenshots = commandManager::getInstance()->screenshots;
     myInfo.illustrate = ui->textEdit->toPlainText();
@@ -184,6 +197,8 @@ Ui::newCheck* newCheck::getUi(){
 }
 
 void newCheck::generatePDF(QString filePath){
+    Q_UNUSED(filePath);
+    /*
     QPrinter printer(QPrinter::HighResolution);
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOutputFileName(filePath);
@@ -200,42 +215,42 @@ void newCheck::generatePDF(QString filePath){
 
         int x = 100;
         int y = 100;
-        QString text = ui->label_basic->text();
+        //QString text = ui->label_basic->text();
         QRect textRect = painter.fontMetrics().boundingRect(text);
-        painter.drawText(QRect(x,y,textRect.width(),textRect.height()), Qt::AlignLeft, text);
+        //painter.drawText(QRect(x,y,textRect.width(),textRect.height()), Qt::AlignLeft, text);
         x = x + textRect.width() + 100;
-        text = ui->label_info->text();
+        //text = ui->label_info->text();
         textRect = painter.fontMetrics().boundingRect(text);
-        painter. drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
+        //painter. drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
 
         x = 100;
         y = y + textRect.height() + 50;
-        text = ui->label_topic->text();
+        //text = ui->label_topic->text();
         textRect = painter.fontMetrics().boundingRect(text);
-        painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
+        //painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
         x = x + textRect.width() + 100;
-        text = ui->lineEdit_topic->text();
+        //text = ui->lineEdit_topic->text();
         textRect = painter.fontMetrics().boundingRect(text);
-        painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
+        //painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
 
         x = 100;
         y = y + textRect.height() + 250;
-        text = ui->label_check->text();
+        //text = ui->label_check->text();
         textRect = painter.fontMetrics().boundingRect(text);
-        painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
+        //painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
         x = x + textRect.width() + 100;
-        text = ui->label_name->text();
+        //text = ui->label_name->text();
         textRect = painter.fontMetrics().boundingRect(text);
-        painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
+        //painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
 
         x = x + textRect.width() + 500;
-        text = ui->label_time->text();
+        //text = ui->label_time->text();
         textRect = painter.fontMetrics().boundingRect(text);
-        painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
+        //painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
         x = x + textRect.width() + 100;
-        text = ui->label_current->text();
+        //text = ui->label_current->text();
         textRect = painter.fontMetrics().boundingRect(text);
-        painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
+        //painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
 
         x = 100;
         y = y + textRect.height() + 600;
@@ -259,11 +274,11 @@ void newCheck::generatePDF(QString filePath){
                 printer.newPage();
                 y = 100;
             }
-            painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
+            //painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
 
             y = y + textRect.height() + 300;
-            text = ui->textEdit->toPlainText();
-            QStringList lines = text.split("\n");
+            //text = ui->textEdit->toPlainText();
+            //QStringList lines = text.split("\n");
             QFontMetrics metrics(painter.font());
             int lineHeight = metrics.height();
             for(const QString& line : lines){
@@ -317,6 +332,7 @@ void newCheck::generatePDF(QString filePath){
 
         painter.end();
     }
+    */
 }
 
 void newCheck::keyPressEvent(QKeyEvent *event)

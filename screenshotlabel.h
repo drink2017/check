@@ -1,16 +1,16 @@
-#ifndef SCREENSHOTLABEL_H
+﻿#ifndef SCREENSHOTLABEL_H
 #define SCREENSHOTLABEL_H
 
-#include "newcheck.h"
-
 #include <QLabel>
+#include <QScrollBar>
 
 class screenshotLabel : public QLabel
 {
 public:
     screenshotLabel(QWidget* parent = nullptr);
 
-    newCheck* check;
+    QScrollBar *verticalScrollBar;
+    QLabel *label_headline;
 
     // QWidget interface
 protected:

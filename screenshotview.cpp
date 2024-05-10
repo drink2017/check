@@ -216,12 +216,12 @@ QGraphicsPathItem* screenshotView::getCurrentPenItem(){
     return currentPenItem;
 }
 
-void screenshotView::setCheck(newCheck *check){
-    this->check = check;
+void screenshotView::setCheck(check *check){
+    this->myCheck = check;
 }
 
-newCheck* screenshotView::getCheck(){
-    return check;
+check* screenshotView::getCheck(){
+    return myCheck;
 }
 
 void screenshotView::hideSelectRectHandles(){

@@ -17,7 +17,7 @@ void screenshotLabel::wheelEvent(QWheelEvent *event)
     int numSteps = numDegrees / 15;
 
     // 根据滚轮滚动方向更新当前显示的图片索引
-    int currentImageIndex = check->getUi()->verticalScrollBar->value();
+    int currentImageIndex = verticalScrollBar->value();
     currentImageIndex -= numSteps;
 
     // 处理边界情况，确保图片索引在合法范围内
@@ -26,7 +26,7 @@ void screenshotLabel::wheelEvent(QWheelEvent *event)
     else if (currentImageIndex >= commandManager::getInstance()->screenshots.size())
         currentImageIndex = commandManager::getInstance()->screenshots.size() - 1;
 
-    check->getUi()->verticalScrollBar->setValue(currentImageIndex);
+    verticalScrollBar->setValue(currentImageIndex);
 
     // 在label中显示对应索引的图片
     changeScreenshot(currentImageIndex);
@@ -37,9 +37,9 @@ void screenshotLabel::wheelEvent(QWheelEvent *event)
 void screenshotLabel::changeScreenshot(int value){
     if(commandManager::getInstance()->screenshots.size() > 0){
         QPixmap screenshot;
-        screenshot = commandManager::getInstance()->screenshots.at(value).scaled(check->getUi()->label_screenshot->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
-        check->getUi()->label_screenshot->setPixmap(screenshot);
-        check->getUi()->label_headline->setText(commandManager::getInstance()->headlines.at(value));
+        screenshot = commandManager::getInstance()->screenshots.at(value).scaled(size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+        setPixmap(screenshot);
+        label_headline->setText(commandManager::getInstance()->headlines.at(value));
     }
 }
 
@@ -52,7 +52,7 @@ void screenshotLabel::mouseDoubleClickEvent(QMouseEvent *event)
         originalWidget->setWindowTitle("Original Pixmap");
         QVBoxLayout* layout = new QVBoxLayout(originalWidget);
         QLabel* originalLabel = new QLabel;
-        int value = check->getUi()->verticalScrollBar->value();
+        int value = verticalScrollBar->value();
         originalLabel->setPixmap(commandManager::getInstance()->screenshots.at(value));
         originalLabel->setScaledContents(true);
         layout->addWidget(originalLabel);
