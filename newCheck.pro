@@ -97,7 +97,7 @@ DISTFILES += \
 RESOURCES += \
     icon.qrc
 
-unix|win32: LIBS += -LE:/software/qt/qtProjects/newCheck/moduleui/lib/ -lModuleUId
+unix|win32: LIBS += -L$$PWD/moduleui/lib/ -lModuleUId
 
-INCLUDEPATH += E:/software/qt/qtProjects/newCheck/moduleui/include
-DEPENDPATH += E:/software/qt/qtProjects/newCheck/moduleui/include
+INCLUDEPATH += $$PWD/moduleui/include
+DEPENDPATH += $$PWD/moduleui/include
