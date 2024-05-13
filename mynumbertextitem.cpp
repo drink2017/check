@@ -1,4 +1,4 @@
-#include "mynumbertextitem.h"
+﻿#include "mynumbertextitem.h"
 #include "commandmanager.h"
 #include "QTextDocument"
 #include "screenshotview.h"
@@ -40,4 +40,21 @@ void myNumberTextItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsTextItem::mouseReleaseEvent(event);
     commandManager::getInstance()->setEditingItem(false);
+}
+
+
+void myNumberTextItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QRectF textRect = boundingRect();
+    if(commandManager::getInstance()->numberCover){
+        painter->setBrush(QBrush(Qt::white));
+    }else{
+        painter->setBrush(Qt::NoBrush);
+    }
+    painter->setPen(Qt::NoPen);
+    painter->drawRect(textRect);
+
+    QGraphicsTextItem::paint(painter,option,widget);
+
+    screenshotView::getInstance()->getScene()->update();
 }

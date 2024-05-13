@@ -1,4 +1,4 @@
-#ifndef MYNUMBERTEXTITEM_H
+﻿#ifndef MYNUMBERTEXTITEM_H
 #define MYNUMBERTEXTITEM_H
 
 #include <QGraphicsTextItem>
@@ -16,6 +16,7 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 };
 
 #endif // MYNUMBERTEXTITEM_H

@@ -1,4 +1,4 @@
-#ifndef TEXTWIDGET_H
+﻿#ifndef TEXTWIDGET_H
 #define TEXTWIDGET_H
 
 #include "textsettings.h"
@@ -63,6 +63,7 @@ private:
     //显示颜色的标签
     QLabel* choice;
 
+    QComboBox* backComboBox;
     QComboBox* sizeComboBox;
 
     void connectToSlots();
@@ -88,6 +89,7 @@ public slots:
     void slotOnCyanButton();
 
     void onComboBoxTextChanged(const QString& text);
+    void onBackComboBoxChanged(const QString& text);
 };
 
 #endif // TEXTWIDGET_H

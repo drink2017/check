@@ -1,4 +1,4 @@
-#include "textcommand.h"
+﻿#include "textcommand.h"
 #include "mytextitem.h"
 #include "screenshotview.h"
 #include "order.h"
@@ -23,20 +23,22 @@ void textCommand::mouseMoveCommand(QMouseEvent *event){
 }
 
 void textCommand::mouseReleaseCommand(QMouseEvent *event){
-    myTextItem* currentTextItem = new myTextItem();
-    currentTextItem->setPos(event->pos());
-    currentTextItem->setDefaultTextColor(screenshotView::getInstance()->getControl()->myTextWidget->settings->getTextColor());
-    QFont font;
-    font.setPointSize(screenshotView::getInstance()->getControl()->myTextWidget->settings->getTextSize());
-    currentTextItem->setFont(font);
-    screenshotView::getInstance()->getScene()->addItem(currentTextItem);
-    currentTextItem->setFocus();
+    if(QRect(screenshotView::getInstance()->getSelectStart(),screenshotView::getInstance()->getSelectEnd()).contains(event->pos())){
+        myTextItem* currentTextItem = new myTextItem();
+        currentTextItem->setPos(event->pos());
+        currentTextItem->setDefaultTextColor(screenshotView::getInstance()->getControl()->myTextWidget->settings->getTextColor());
+        QFont font;
+        font.setPointSize(screenshotView::getInstance()->getControl()->myTextWidget->settings->getTextSize());
+        currentTextItem->setFont(font);
+        screenshotView::getInstance()->getScene()->addItem(currentTextItem);
+        currentTextItem->setFocus();
 
-    order* addOrder = new order();
-    addOrder->addToAddItem(currentTextItem);
-    undoManager* myUndoManager = undoManager::getInstance();
-    redoManager* myRedoManager = redoManager::getInstance();
-    myUndoManager->pushOrder(addOrder);
-    myRedoManager->clear();
+        order* addOrder = new order();
+        addOrder->addToAddItem(currentTextItem);
+        undoManager* myUndoManager = undoManager::getInstance();
+        redoManager* myRedoManager = redoManager::getInstance();
+        myUndoManager->pushOrder(addOrder);
+        myRedoManager->clear();
+    }
 }
 

@@ -1,7 +1,8 @@
-#include "textwidget.h"
+﻿#include "textwidget.h"
 #include "screenshotview.h"
 #include "mytextitem.h"
 #include "mynumberitem.h"
+#include "commandmanager.h"
 
 #include <QPainter>
 #include <QDebug>
@@ -105,11 +106,17 @@ void textWidget::setButtons(){
 }
 
 void textWidget::addWidgetToLayout(){
+    backComboBox = new QComboBox();
+    backComboBox->setFixedSize(70,50);
+    QStringList backOptions = {"遮挡","不遮"};
+    backComboBox->addItems(backOptions);
+    totalLayout->addWidget(backComboBox);
+
     QLabel* A = new QLabel();
     QFont font("Arial", 18);
     font.setBold(true);
     A->setFont(font);
-    A->setFixedSize(QSize(50,50));
+    A->setFixedSize(QSize(35,50));
     A->setAlignment(Qt::AlignCenter);
     A->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     A->setText("A");
@@ -117,6 +124,7 @@ void textWidget::addWidgetToLayout(){
 
     sizeComboBox = new QComboBox();
 
+    /*
     sizeComboBox->setStyleSheet("QComboBox {"
                             "    border: 1px solid gray;"
                             "    border-radius: 3px;"
@@ -124,9 +132,10 @@ void textWidget::addWidgetToLayout(){
                             "    color:#666666;"
                             "    font-size:32px;"
                             "}"
-                            );
+                            );*/
 
-    sizeComboBox->setFixedSize(102,50);
+    //sizeComboBox->setFixedSize(102,50);
+    sizeComboBox->setFixedSize(50,50);
     QStringList options = {"8", "9", "10","11","12","14","16","18","20","22"};
     sizeComboBox->addItems(options);
     totalLayout->addWidget(sizeComboBox);
@@ -186,6 +195,7 @@ void textWidget::connectToSlots(){
     connect(cyanButton,&QPushButton::clicked,this,&textWidget::slotOnCyanButton);
 
     connect(sizeComboBox,&QComboBox::currentTextChanged,this,&textWidget::onComboBoxTextChanged);
+    connect(backComboBox,&QComboBox::currentTextChanged,this,&textWidget::onBackComboBoxChanged);
 }
 
 void textWidget::slotOnBlackButton(){
@@ -657,6 +667,11 @@ void textWidget::setInitialLabel(){
             sizeComboBox->setCurrentIndex(9);
             break;
         }
+        if(commandManager::getInstance()->textCover == true){
+            backComboBox->setCurrentIndex(0);
+        }else{
+            backComboBox->setCurrentIndex(1);
+        }
         break;
     case textWidgetType::serial:
         color = settings->getNumberColor().name();
@@ -692,6 +707,11 @@ void textWidget::setInitialLabel(){
             sizeComboBox->setCurrentIndex(9);
             break;
         }
+        if(commandManager::getInstance()->numberCover == true){
+            backComboBox->setCurrentIndex(0);
+        }else{
+            backComboBox->setCurrentIndex(1);
+        }
         break;
     default:
         color = "black";
@@ -726,6 +746,25 @@ void textWidget::onComboBoxTextChanged(const QString& text){
             focusedNumberTextItem->setFont(font);
         }
         settings->setNumberSize(text.toInt());
+        break;
+    }
+}
+
+void textWidget::onBackComboBoxChanged(const QString& text){
+    switch (type) {
+    case textWidgetType::text:
+        if(text == "遮挡"){
+            commandManager::getInstance()->textCover = true;
+        }else{
+            commandManager::getInstance()->textCover = false;
+        }
+        break;
+    case textWidgetType::serial:
+        if(text == "遮挡"){
+            commandManager::getInstance()->numberCover = true;
+        }else{
+            commandManager::getInstance()->numberCover = false;
+        }
         break;
     }
 }

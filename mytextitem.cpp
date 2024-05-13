@@ -110,3 +110,24 @@ void myTextItem::focusOutEvent(QFocusEvent *event)
         }
     }
 }
+
+void myTextItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    QRectF textRect = boundingRect();
+    //QRectF backgroundRect = textRect.adjusted(-10, -5, 10, 5); // 在文字周围增加一些内边距
+
+    // 绘制背景矩形
+    //painter->setBrush(QBrush(QColor(0, 0, 0, 180))); // 设置半透明黑色背景
+    if(commandManager::getInstance()->textCover){
+        painter->setBrush(QBrush(Qt::white));
+    }else{
+        painter->setBrush(Qt::NoBrush);
+    }
+    painter->setPen(Qt::NoPen);
+    //painter->drawRect(backgroundRect);
+    painter->drawRect(textRect);
+
+    QGraphicsTextItem::paint(painter,option,widget);
+
+    screenshotView::getInstance()->getScene()->update();
+}

@@ -1,4 +1,4 @@
-﻿#include "screenshotview.h"
+﻿ #include "screenshotview.h"
 #include "commandmanager.h"
 #include "mytextitem.h"
 #include "mynumberitem.h"

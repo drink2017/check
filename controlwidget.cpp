@@ -594,6 +594,7 @@ void controlWidget::shot(){
     screenshotView::getInstance()->getControl()->hide();
     screenshotView::getInstance()->getControl()->myTextWidget->hide();
     screenshotView::getInstance()->getControl()->myColorWidget->hide();
+    screenshotView::getInstance()->getCurrentSelectItem()->hide();
 
     //等待rectHandles被隐藏了再截屏
     QEventLoop loop;

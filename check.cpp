@@ -418,9 +418,6 @@ void check::generatePDF(QString filePath){
         QRect textRect = painter.fontMetrics().boundingRect(text);
         painter.drawText(QRect(x,y,textRect.width(),textRect.height()), Qt::AlignLeft, text);
         x = x + textRect.width() + 100;
-        //text = ui->label_info->text();
-        //textRect = painter.fontMetrics().boundingRect(text);
-        //painter. drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
 
         x = 100;
         y = y + textRect.height() + 50;
@@ -437,19 +434,11 @@ void check::generatePDF(QString filePath){
         text = label_check->text();
         textRect = painter.fontMetrics().boundingRect(text);
         painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
-        //x = x + textRect.width() + 100;
-        //text = label_name->text();
-        //textRect = painter.fontMetrics().boundingRect(text);
-        //painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
 
         x = x + textRect.width() + 500;
         text = label_time->text();
         textRect = painter.fontMetrics().boundingRect(text);
         painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
-        //x = x + textRect.width() + 100;
-        //text = label_current->text();
-        //textRect = painter.fontMetrics().boundingRect(text);
-        //painter.drawText(QRect(x,y,textRect.width(),textRect.height()),Qt::AlignLeft,text);
 
         x = 100;
         y = y + textRect.height() + 600;
@@ -557,6 +546,21 @@ void check::resizeEvent(QResizeEvent *event)
     int currentImageIndex = commandManager::getInstance()->screenshots.size() - 1;
     label_screenshot->changeScreenshot(currentImageIndex);
 }
+
+void check::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_Escape){
+        slotOnDeleteAllButton();
+    }
+}
+
+
+
+
+
+
+
+
 
 
 

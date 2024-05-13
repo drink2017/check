@@ -50,6 +50,9 @@ public:
 
     int screenshotValue;
 
+    bool textCover = true;
+    bool numberCover = true;
+
 private:
     static commandManager* instance;
     explicit commandManager(QObject *parent = nullptr);

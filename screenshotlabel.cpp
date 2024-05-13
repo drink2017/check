@@ -61,5 +61,6 @@ void screenshotLabel::mouseDoubleClickEvent(QMouseEvent *event)
         originalWidget->setStyleSheet("background-color: gray;");
         originalWidget->setGeometry(0,0,originalWidget->width(),originalWidget->height());
         originalWidget->show();
+        //33333234234234234
     }
 }

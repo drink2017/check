@@ -24,16 +24,18 @@ void numberCommand::mouseMoveCommand(QMouseEvent *event){
 }
 
 void numberCommand::mouseReleaseCommand(QMouseEvent *event){
-    myNumberItem* currentNumberItem = new myNumberItem(commandManager::getInstance()->number);
-    commandManager::getInstance()->number++;
-    currentNumberItem->setPos(event->pos());
-    currentNumberItem->text->setDefaultTextColor(screenshotView::getInstance()->getControl()->myTextWidget->settings->getNumberColor());
-    screenshotView::getInstance()->getScene()->addItem(currentNumberItem);
+    if(QRect(screenshotView::getInstance()->getSelectStart(),screenshotView::getInstance()->getSelectEnd()).contains(event->pos())){
+        myNumberItem* currentNumberItem = new myNumberItem(commandManager::getInstance()->number);
+        commandManager::getInstance()->number++;
+        currentNumberItem->setPos(event->pos());
+        currentNumberItem->text->setDefaultTextColor(screenshotView::getInstance()->getControl()->myTextWidget->settings->getNumberColor());
+        screenshotView::getInstance()->getScene()->addItem(currentNumberItem);
 
-    order* addOrder = new order();
-    addOrder->addToAddItem(currentNumberItem);
-    undoManager* myUndoManager = undoManager::getInstance();
-    redoManager* myRedoManager = redoManager::getInstance();
-    myUndoManager->pushOrder(addOrder);
-    myRedoManager->clear();
+        order* addOrder = new order();
+        addOrder->addToAddItem(currentNumberItem);
+        undoManager* myUndoManager = undoManager::getInstance();
+        redoManager* myRedoManager = redoManager::getInstance();
+        myUndoManager->pushOrder(addOrder);
+        myRedoManager->clear();
+    }
 }
