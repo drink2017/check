@@ -6,6 +6,8 @@
 #include <QFileDialog>
 #include <QPrinter>
 #include <QMessageBox>
+#include <QDebug>
+#include <QDesktopServices>
 
 #include "commandmanager.h"
 #include "screenshotview.h"
@@ -24,7 +26,6 @@ check::check(QWidget *parent)
     font.setFamily("思源黑体");
     font.setPixelSize(13);
     this->setTitleFont(font);
-    //setFixedSize(631,773);
     resize(631,773);
 
     QIcon mainIcon(":/icons/newCheck/main.png");
@@ -66,6 +67,7 @@ check::check(QWidget *parent)
     connect(pushButton_clear,&QPushButton::clicked,this,&check::slotOnClearButton);
     connect(verticalScrollBar,&QScrollBar::valueChanged,label_screenshot,&screenshotLabel::changeScreenshot);
     connect(pushButton_sign,&QPushButton::clicked,this,&check::slotOnSignButton);
+    connect(pushButton_preview,&QPushButton::clicked,this,&check::slotOnPreviewButton);
     connect(pushButton_export,&QPushButton::clicked,this,&check::slotOnExportButton);
     connect(pushButton_deleteAll,&QPushButton::clicked,this,&check::slotOnDeleteAllButton);
 }
@@ -252,6 +254,13 @@ void check::setupWidgets(UiMainWindow *newCheck){
 
     horizontalLayout_5->addWidget(pushButton_sign);
 
+    pushButton_preview = new QPushButton(widget);
+    pushButton_preview->setObjectName(QString::fromUtf8("pushButton_preview"));
+    pushButton_preview->setMaximumSize(QSize(16777215,40));
+    pushButton_preview->setText("预览");
+
+    horizontalLayout_5->addWidget(pushButton_preview);
+
     pushButton_export = new QPushButton(widget);
     pushButton_export->setObjectName(QString::fromUtf8("pushButton_export"));
     pushButton_export->setEnabled(true);
@@ -398,6 +407,7 @@ void check::slotOnDeleteAllButton(){
 }
 
 void check::generatePDF(QString filePath){
+    /*
     QPrinter printer(QPrinter::HighResolution);
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOutputFileName(filePath);
@@ -520,6 +530,131 @@ void check::generatePDF(QString filePath){
 
         painter.end();
     }
+    */
+
+    //创建打印机对象
+    QPrinter printer(QPrinter::HighResolution);
+    printer.setPageSize(QPrinter::A4);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOutputFileName(filePath);
+
+    QPainter painter;
+    if(painter.begin(&printer)){
+        painter.setPen(Qt::red);
+        QRect myPageRect = QRect(167,167,9350,13450);
+
+        QString title = "my title";
+        QFont titleFont("思源黑体", 20, QFont::Bold);
+        painter.setFont(titleFont);
+        painter.drawText(myPageRect,Qt::AlignHCenter,title);
+        int titleHeight = painter.fontMetrics().boundingRect(title).height();
+        myPageRect = QRect(myPageRect.x(),myPageRect.y() + titleHeight,myPageRect.width(),myPageRect.height() - titleHeight);
+
+        QFont contentFont("思源黑体",12,QFont::Normal);
+        painter.setFont(contentFont);
+        QString topic = "主题： " + lineEdit_topic->text();
+        painter.drawText(myPageRect,Qt::AlignLeft,topic);
+        int topicHeight = painter.fontMetrics().boundingRect(topic).height();
+        myPageRect = QRect(myPageRect.x(),myPageRect.y() + topicHeight,myPageRect.width(),myPageRect.height() - topicHeight);
+
+        QPixmap signPixmap;
+        if(pushButton_sign->isEnabled()){
+            QString sign = "签字：未签字";
+            painter.drawText(myPageRect,Qt::AlignLeft,sign);
+            int signHeight = painter.fontMetrics().boundingRect(sign).height();
+            myPageRect = QRect(myPageRect.x(),myPageRect.y() + signHeight,myPageRect.width(),myPageRect.height() - signHeight);
+        }else if(signPixmap.load("C:\\Users\\drink water\\Pictures\\微信头像.jpg")){
+            QString sign = "签字：";
+            painter.drawText(myPageRect,Qt::AlignLeft,sign);
+            int signWidth = painter.fontMetrics().boundingRect(sign).width();
+            QRect pixmapRect = QRect(myPageRect.x() + signWidth,myPageRect.y(),signPixmap.width(),signPixmap.height());
+            painter.drawPixmap(pixmapRect,signPixmap);
+            myPageRect = QRect(myPageRect.x(),myPageRect.y() + signPixmap.height(),myPageRect.width(),myPageRect.height() - signPixmap.height());
+        }
+
+        QString man = label_check->text();
+        painter.drawText(myPageRect,Qt::AlignLeft,man);
+        int manHeight = painter.fontMetrics().boundingRect(man).height();
+        myPageRect = QRect(myPageRect.x(),myPageRect.y() + manHeight,myPageRect.width(),myPageRect.height() - manHeight);
+
+        QString date = label_time->text();
+        painter.drawText(myPageRect,Qt::AlignLeft,date);
+        int dateHeight = painter.fontMetrics().boundingRect(date).height();
+        myPageRect = QRect(myPageRect.x(),myPageRect.y() + dateHeight,myPageRect.width(),myPageRect.height() - dateHeight);
+
+        if(textEdit->toPlainText().isEmpty()){
+            QString illustrate = label->text() + "无校核说明";
+            painter.drawText(myPageRect,Qt::AlignLeft,illustrate);
+            int illustrateHeight = painter.fontMetrics().boundingRect(illustrate).height();
+            myPageRect = QRect(myPageRect.x(),myPageRect.y() + illustrateHeight,myPageRect.width(),myPageRect.height() - illustrateHeight);
+        }else{
+            QString illustrate = label->text();
+            painter.drawText(myPageRect,Qt::AlignLeft,illustrate);
+            int illustrateHeight = painter.fontMetrics().boundingRect(illustrate).height();
+            myPageRect = QRect(myPageRect.x(),myPageRect.y() + illustrateHeight,myPageRect.width(),myPageRect.height() - illustrateHeight);
+
+            QString text = textEdit->toPlainText();
+            QStringList lines = text.split("\n");
+            QFontMetrics metrics(painter.font());
+            int lineHeight = metrics.height();
+            for(const QString& line : lines){
+                QStringList words = line.split("");
+                QString currentLine;
+                for(const QString& word : words){
+                    int width = metrics.horizontalAdvance(currentLine + word + " ");
+                    if(width > myPageRect.width()){
+                        if(myPageRect.y() + lineHeight >= myPageRect.height()){
+                            printer.newPage();
+                            myPageRect = QRect(167,167,9350,13450);
+                        }
+                        painter.drawText(myPageRect,Qt::AlignLeft,currentLine);
+                        myPageRect = QRect(myPageRect.x(),myPageRect.y() + lineHeight,myPageRect.width(),myPageRect.height() - lineHeight);
+                        currentLine.clear();
+                    }
+                    currentLine += word;
+                }
+
+                if(!currentLine.isEmpty()){
+                    if(myPageRect.y() + lineHeight >= printer.pageRect().height()){
+                        myPageRect = QRect(167,167,9350,13450);
+                        printer.newPage();
+                    }
+                    painter.drawText(myPageRect,Qt::AlignLeft,currentLine);
+                    myPageRect = QRect(myPageRect.x(),myPageRect.y() + lineHeight,myPageRect.width(),myPageRect.height() - lineHeight);
+                }
+            }
+        }
+
+        int quantity = 0;
+        foreach(QPixmap screenshot,commandManager::getInstance()->screenshots){
+            myPageRect = QRect(167,167,9350,13450);
+            if(quantity == 0){
+                printer.newPage();
+                painter.drawRect(myPageRect);
+                painter.drawLine(QLineF(myPageRect.x(),myPageRect.y() + myPageRect.height()/2,myPageRect.right(),myPageRect.y() + myPageRect.height()/2));
+
+                myPageRect = QRect(myPageRect.x(),myPageRect.y(),myPageRect.width(),myPageRect.height()/2);
+                QString info = "截图说明";
+                painter.drawText(myPageRect,Qt::AlignLeft,info);
+                int infoHeight = painter.fontMetrics().boundingRect(info).height();
+                myPageRect = QRect(myPageRect.x(),myPageRect.y() + infoHeight,myPageRect.width(),myPageRect.height()-infoHeight);
+
+                painter.drawPixmap(myPageRect,screenshot);
+                quantity ++;
+            }else{
+                myPageRect = QRect(myPageRect.x(),myPageRect.y() + myPageRect.height()/2,myPageRect.width(),myPageRect.height()/2);
+                QString info = "截图说明";
+                painter.drawText(myPageRect,Qt::AlignLeft,info);
+                int infoHeight = painter.fontMetrics().boundingRect(info).height();
+                myPageRect = QRect(myPageRect.x(),myPageRect.y() + infoHeight,myPageRect.width(),myPageRect.height()/2);
+
+                painter.drawPixmap(myPageRect,screenshot);
+                quantity = 0;
+            }
+        }
+
+        painter.end();
+    }
 }
 
 
@@ -554,25 +689,13 @@ void check::keyPressEvent(QKeyEvent *event)
     }
 }
 
+void check::slotOnPreviewButton(){
+    QString filePath = "output.pdf";
 
+    generatePDF(filePath);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
+}
 
 
 

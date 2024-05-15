@@ -39,6 +39,7 @@ private:
     QTextEdit *textEdit;
     QHBoxLayout *horizontalLayout_5;
     QPushButton *pushButton_sign;
+    QPushButton *pushButton_preview;
     QPushButton *pushButton_export;
     QPushButton *pushButton_deleteAll;
     QPushButton *pushButton_save;
@@ -63,6 +64,7 @@ public slots:
     //void slotOnSaveButton();
     void slotOnDeleteAllButton();
     void slotOnExportButton();
+    void slotOnPreviewButton();
 
     // QWidget interface
 protected:
