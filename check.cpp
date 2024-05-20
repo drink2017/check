@@ -302,7 +302,7 @@ void check::retranslateUi(){
     pushButton_re->setText(QString());
     pushButton_clear->setText(QString());
     label_sign->setText(QString());
-    label_check->setText(QCoreApplication::translate("newCheck", "\346\240\241\346\240\270\344\272\272\357\274\232name", nullptr));
+    label_check->setText(QCoreApplication::translate("newCheck", "\346\240\241\346\240\270\344\272\272\357\274\232", nullptr));
     label_time->setText(QCoreApplication::translate("newCheck", "\346\240\241\346\240\270\346\227\266\351\227\264\357\274\232", nullptr));
     label_headline->setText(QString());
     label_screenshot->setText(QString());
@@ -376,6 +376,8 @@ void check::slotOnSignButton(){
         label_sign->setScaledContents(true);
     }
 
+    QString name = "name";
+    label_check->setText(label_check->text() + name);
     QDateTime currentDateTime = QDateTime::currentDateTime();
     QString currentTime = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
     label_time->setText(label_time->text() + currentTime);
@@ -419,11 +421,13 @@ void check::generatePDF(QString filePath){
         painter.setPen(QPen(Qt::black,5));
         QRect myPageRect = QRect(167,167,9350,13450);
 
-        QString title = "my title";
+        //QString title = "my title";
         QFont titleFont("思源黑体", 20, QFont::Bold);
         painter.setFont(titleFont);
-        painter.drawText(myPageRect,Qt::AlignHCenter,title);
-        int titleHeight = painter.fontMetrics().boundingRect(title).height() + 20;
+        //painter.drawText(myPageRect,Qt::AlignHCenter,title);
+        //int titleHeight = painter.fontMetrics().boundingRect(title).height() + 20;
+        painter.drawText(myPageRect,Qt::AlignHCenter,label_info->text().remove("基本信息："));
+        int titleHeight = painter.fontMetrics().boundingRect(label_info->text().remove("基本信息：")).height() + 20;
         myPageRect = QRect(myPageRect.x(),myPageRect.y() + titleHeight,myPageRect.width(),myPageRect.height() - titleHeight);
 
         painter.drawLine(QLine(myPageRect.x(),myPageRect.y(),myPageRect.x() + myPageRect.width(),myPageRect.y()));
@@ -466,15 +470,35 @@ void check::generatePDF(QString filePath){
             myPageRect = QRect(myPageRect.x(),myPageRect.y() + signPixmap.height(),myPageRect.width(),myPageRect.height() - signPixmap.height());
         }
 
-        QString man = label_check->text();
-        painter.drawText(myPageRect,Qt::AlignLeft,man);
-        int manHeight = painter.fontMetrics().boundingRect(man).height() + 20;
-        myPageRect = QRect(myPageRect.x(),myPageRect.y() + manHeight,myPageRect.width(),myPageRect.height() - manHeight);
+        if(pushButton_sign->isEnabled()){
+            painter.save();
+            painter.setPen(Qt::red);
+            QString man = label_check->text() + "未签字";
+            painter.drawText(myPageRect,Qt::AlignLeft,man);
+            painter.restore();
+            int manHeight = painter.fontMetrics().boundingRect(man).height() + 20;
+            myPageRect = QRect(myPageRect.x(),myPageRect.y() + manHeight,myPageRect.width(),myPageRect.height() - manHeight);
+        }else{
+            QString man = label_check->text();
+            painter.drawText(myPageRect,Qt::AlignLeft,man);
+            int manHeight = painter.fontMetrics().boundingRect(man).height() + 20;
+            myPageRect = QRect(myPageRect.x(),myPageRect.y() + manHeight,myPageRect.width(),myPageRect.height() - manHeight);
+        }
 
-        QString date = label_time->text();
-        painter.drawText(myPageRect,Qt::AlignLeft,date);
-        int dateHeight = painter.fontMetrics().boundingRect(date).height() + 20;
-        myPageRect = QRect(myPageRect.x(),myPageRect.y() + dateHeight,myPageRect.width(),myPageRect.height() - dateHeight);
+        if(pushButton_begin->isEnabled()){
+            painter.save();
+            painter.setPen(Qt::red);
+            QString date = label_time->text() + "未签字";
+            painter.drawText(myPageRect,Qt::AlignLeft,date);
+            painter.restore();
+            int dateHeight = painter.fontMetrics().boundingRect(date).height() + 20;
+            myPageRect = QRect(myPageRect.x(),myPageRect.y() + dateHeight,myPageRect.width(),myPageRect.height() - dateHeight);
+        }else{
+            QString date = label_time->text();
+            painter.drawText(myPageRect,Qt::AlignLeft,date);
+            int dateHeight = painter.fontMetrics().boundingRect(date).height() + 20;
+            myPageRect = QRect(myPageRect.x(),myPageRect.y() + dateHeight,myPageRect.width(),myPageRect.height() - dateHeight);
+        }
 
         painter.drawLine(QLine(myPageRect.x(),myPageRect.y(),myPageRect.x() + myPageRect.width(),myPageRect.y()));
         myPageRect = QRect(myPageRect.x(),myPageRect.y() + 20,myPageRect.width(),myPageRect.height() - 20);
@@ -488,9 +512,13 @@ void check::generatePDF(QString filePath){
             int illustrateHeight = painter.fontMetrics().boundingRect(illustrate).height();
             myPageRect = QRect(myPageRect.x(),myPageRect.y() + illustrateHeight,myPageRect.width(),myPageRect.height() - illustrateHeight);
         }else{
+            painter.save();
+            QFont titleFont("思源黑体",24,QFont::Normal);
+            painter.setFont(titleFont);
             QString illustrate = label->text();
             painter.drawText(myPageRect,Qt::AlignLeft,illustrate);
             int illustrateHeight = painter.fontMetrics().boundingRect(illustrate).height();
+            painter.restore();
             myPageRect = QRect(myPageRect.x(),myPageRect.y() + illustrateHeight,myPageRect.width(),myPageRect.height() - illustrateHeight);
 
             QString text = textEdit->toPlainText();
