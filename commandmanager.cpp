@@ -152,6 +152,7 @@ void commandManager::quit(){
         delete screenshotView::getInstance()->getControl()->myTextWidget;
         delete screenshotView::getInstance()->getInfo();
     }
+    delete screenshotView::getInstance()->getControl();
     screenshotView::getInstance()->getCheck()->showNormal();
     screenshotView::releaseInstance();
 
