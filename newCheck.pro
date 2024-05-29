@@ -23,7 +23,6 @@ msvc {
 
 SOURCES += \
     arrowcommand.cpp \
-    check.cpp \
     colorwidget.cpp \
     command.cpp \
     commandmanager.cpp \
@@ -38,6 +37,7 @@ SOURCES += \
     mypenitem.cpp \
     myrectitem.cpp \
     mytextitem.cpp \
+    newcheck.cpp \
     numbercommand.cpp \
     order.cpp \
     pencommand.cpp \
@@ -55,7 +55,6 @@ SOURCES += \
 
 HEADERS += \
     arrowcommand.h \
-    check.h \
     colorwidget.h \
     command.h \
     commandmanager.h \
@@ -69,6 +68,7 @@ HEADERS += \
     mypenitem.h \
     myrectitem.h \
     mytextitem.h \
+    newcheck.h \
     numbercommand.h \
     order.h \
     pencommand.h \

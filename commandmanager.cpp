@@ -153,7 +153,11 @@ void commandManager::quit(){
         delete screenshotView::getInstance()->getInfo();
     }
     delete screenshotView::getInstance()->getControl();
-    screenshotView::getInstance()->getCheck()->showNormal();
+    if(checkIsMax){
+        screenshotView::getInstance()->getCheck()->showMaximized();
+    }else{
+        screenshotView::getInstance()->getCheck()->showNormal();
+    }
     screenshotView::releaseInstance();
 
     //属性初始化

@@ -216,11 +216,11 @@ QGraphicsPathItem* screenshotView::getCurrentPenItem(){
     return currentPenItem;
 }
 
-void screenshotView::setCheck(check *check){
+void screenshotView::setCheck(newCheck *check){
     this->myCheck = check;
 }
 
-check* screenshotView::getCheck(){
+newCheck* screenshotView::getCheck(){
     return myCheck;
 }
 

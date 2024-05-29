@@ -319,7 +319,7 @@ void check::slotOnBeginButton(){
     screenshotView* w = screenshotView::getInstance();
     commandManager::getInstance()->screenshotValue = verticalScrollBar->value();
     w->setType(shotType::newShot);
-    w->setCheck(this);
+    //w->setCheck(this);
     w->setWindowState(Qt::WindowActive);
     w->show();
 }
@@ -333,7 +333,7 @@ void check::updateScreenshots(){
     }else{
         screenshot = commandManager::getInstance()->screenshots.at(commandManager::getInstance()->screenshotValue).scaled(label_screenshot->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
         label_screenshot->setPixmap(screenshot);
-        label_headline->setText(commandManager::getInstance()->headlines.at(commandManager::getInstance()->screenshotValue));
+        label_headline->setText(commandManager::getInstance()->headlines.at(commandManager::getInstance()->screenshotValue));     
     }
 }
 
@@ -357,7 +357,7 @@ void check::slotOnReButton(){
         screenshotView* w = screenshotView::getInstance();
         commandManager::getInstance()->screenshotValue = verticalScrollBar->value();
         w->setType(shotType::replace);
-        w->setCheck(this);
+        //w->setCheck(this);
         w->setWindowState(Qt::WindowActive);
         w->show();
     }

@@ -47,11 +47,14 @@ public:
 
     QList<QPixmap> screenshots;
     QList<QString> headlines;
+    QList<QString> illustrate;
 
     int screenshotValue;
 
     bool textCover = true;
     bool numberCover = true;
+
+    bool checkIsMax = false;
 
 private:
     static commandManager* instance;

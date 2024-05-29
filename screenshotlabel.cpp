@@ -4,6 +4,7 @@
 #include <QWheelEvent>
 #include <QDebug>
 #include <QVBoxLayout>
+#include <QScrollBar>
 
 screenshotLabel::screenshotLabel(QWidget* parent) : QLabel(parent)
 {
@@ -40,6 +41,7 @@ void screenshotLabel::changeScreenshot(int value){
         screenshot = commandManager::getInstance()->screenshots.at(value).scaled(size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
         setPixmap(screenshot);
         label_headline->setText(commandManager::getInstance()->headlines.at(value));
+        listWidget->setCurrentRow(value);
     }
 }
 

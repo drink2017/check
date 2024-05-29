@@ -608,11 +608,14 @@ void controlWidget::shot(){
         commandManager::getInstance()->screenshots.append(screenshot);
         QDateTime currentDateTime = QDateTime::currentDateTime();
         commandManager::getInstance()->headlines.append(currentDateTime.toString());
+        commandManager::getInstance()->illustrate.append("校核说明:\n");
     }else if(screenshotView::getInstance()->getType() == shotType::replace){
         commandManager::getInstance()->screenshots.replace(commandManager::getInstance()->screenshotValue,screenshot);
         QDateTime currentDateTime = QDateTime::currentDateTime();
         commandManager::getInstance()->headlines.replace(commandManager::getInstance()->screenshotValue,currentDateTime.toString());
+        commandManager::getInstance()->illustrate.replace(commandManager::getInstance()->screenshotValue,"校核说明:\n");
     }
+    screenshotView::getInstance()->getCheck()->updateListWidget();
     screenshotView::getInstance()->getCheck()->updateScreenshots();
     commandManager::getInstance()->quit();
 }
