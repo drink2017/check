@@ -4,6 +4,7 @@
 #include <QLabel>
 #include <QScrollBar>
 #include <QListWidget>
+#include <QTextEdit>
 
 class screenshotLabel : public QLabel
 {
@@ -13,6 +14,7 @@ public:
     QScrollBar *verticalScrollBar;
     QLabel *label_headline;
     QListWidget* listWidget;
+    QTextEdit* illustrate;
 
     // QWidget interface
 protected:

@@ -68,6 +68,7 @@ public slots:
     void slotOnExportButton();
     void slotOnPreviewButton();
     void slotOnListItemSelection();
+    void slotOnTextChanged();
 
     // QWidget interface
 protected:

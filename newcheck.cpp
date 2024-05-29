@@ -33,6 +33,7 @@ newCheck::newCheck()
     label_5->label_headline = label_2;
     label_5->verticalScrollBar = verticalScrollBar;
     label_5->listWidget = listWidget;
+    label_5->illustrate = textEdit;
 
     QIcon beginScreenshot(":/icons/newCheck/beginScreenshot.png");
     pushButton->setIcon(beginScreenshot);
@@ -69,6 +70,7 @@ newCheck::newCheck()
     //connect(pushButton_7,&QPushButton::clicked,this,&check::slotOnExportButton);
     connect(pushButton_9,&QPushButton::clicked,this,&newCheck::slotOnDeleteAllButton);
     connect(listWidget,&QListWidget::itemSelectionChanged,this,&newCheck::slotOnListItemSelection);
+    connect(textEdit,&QTextEdit::textChanged,this,&newCheck::slotOnTextChanged);
 }
 
 void newCheck::setupWidgets(UiMainWindow *Widget){
@@ -178,10 +180,6 @@ void newCheck::setupWidgets(UiMainWindow *Widget){
     listWidget->setSizePolicy(sizePolicy);
     listWidget->setViewMode(QListView::IconMode);
 
-    //QPalette palette = listWidget->palette();
-    //palette.setColor(QPalette::Base, Qt::darkGray);
-    //listWidget->setPalette(palette);
-
     horizontalLayout_3->addWidget(listWidget);
 
     label_5 = new screenshotLabel(widget);
@@ -209,6 +207,7 @@ void newCheck::setupWidgets(UiMainWindow *Widget){
 
     textEdit = new QTextEdit(widget);
     textEdit->setObjectName(QString::fromUtf8("textEdit"));
+    textEdit->setEnabled(false);
 
     horizontalLayout_3->addWidget(textEdit);
 
@@ -304,9 +303,11 @@ void newCheck::slotOnReButton(){
 
 void newCheck::slotOnDeleteButton(){
     if(!commandManager::getInstance()->screenshots.isEmpty()){
+        textEdit->clear();
         commandManager::getInstance()->screenshotValue = verticalScrollBar->value();
         commandManager::getInstance()->screenshots.takeAt(commandManager::getInstance()->screenshotValue);
         commandManager::getInstance()->headlines.takeAt(commandManager::getInstance()->screenshotValue);
+        commandManager::getInstance()->illustrate.takeAt(commandManager::getInstance()->screenshotValue);
         if(commandManager::getInstance()->screenshotValue >= 1){
             commandManager::getInstance()->screenshotValue -= 1;
             verticalScrollBar->setValue(commandManager::getInstance()->screenshotValue);
@@ -317,8 +318,13 @@ void newCheck::slotOnDeleteButton(){
 }
 
 void newCheck::slotOnClearButton(){
+    if(!commandManager::getInstance()->screenshots.empty()){
+        textEdit->clear();
+        textEdit->setEnabled(false);
+    }
     commandManager::getInstance()->screenshots.clear();
     commandManager::getInstance()->headlines.clear();
+    commandManager::getInstance()->illustrate.clear();
     updateScreenshots();
     updateListWidget();
 }
@@ -355,12 +361,13 @@ void newCheck::updateScreenshots(){
     if(commandManager::getInstance()->screenshots.size() == 0){
         label_5->setText("未有截图");
         label_2->setText("");
-        textEdit->setText("");
+        textEdit->setEnabled(false);
     }else{
         screenshot = commandManager::getInstance()->screenshots.at(commandManager::getInstance()->screenshotValue).scaled(label_5->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
         label_5->setPixmap(screenshot);
         label_2->setText(commandManager::getInstance()->headlines.at(commandManager::getInstance()->screenshotValue));
         textEdit->setText(commandManager::getInstance()->illustrate.at(commandManager::getInstance()->screenshotValue));
+        textEdit->setEnabled(true);
         listWidget->setCurrentRow(verticalScrollBar->value());
     }
 }
@@ -406,6 +413,10 @@ void newCheck::slotOnListItemSelection(){
     int currentItemIndex = listWidget->currentRow();
     label_5->changeScreenshot(currentItemIndex);
     verticalScrollBar->setValue(currentItemIndex);
+}
+
+void newCheck::slotOnTextChanged(){
+    commandManager::getInstance()->illustrate.replace(verticalScrollBar->value(),textEdit->toPlainText());
 }
 
 
