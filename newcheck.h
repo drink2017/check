@@ -15,6 +15,7 @@ class newCheck : public UiMainWindow
 {
 public:
     newCheck();
+    ~newCheck();
 
     void updateListWidget();
 
@@ -56,6 +57,9 @@ private:
 
     bool messageBoxIsShowing = false;
 
+    bool generatePDF(QString filePath);
+    int page = 1;
+
 public slots:
     void slotOnClearButton();
     void slotOnDeleteButton();
@@ -74,6 +78,7 @@ public slots:
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
 };
 
 #endif // NEWCHECK_H

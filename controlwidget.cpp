@@ -605,10 +605,10 @@ void controlWidget::shot(){
     QPixmap screenshot = screen->grabWindow(0,captureRect.x(),captureRect.y(),captureRect.width(),captureRect.height());
     if(screenshotView::getInstance()->getType() == shotType::newShot){
         commandManager::getInstance()->screenshots.append(screenshot);
-        commandManager::getInstance()->illustrate.append("校核说明:\n");
+        commandManager::getInstance()->illustrate.append("");
     }else if(screenshotView::getInstance()->getType() == shotType::replace){
         commandManager::getInstance()->screenshots.replace(commandManager::getInstance()->screenshotValue,screenshot);
-        commandManager::getInstance()->illustrate.replace(commandManager::getInstance()->screenshotValue,"校核说明:\n");
+        commandManager::getInstance()->illustrate.replace(commandManager::getInstance()->screenshotValue,"");
     }
     screenshotView::getInstance()->getCheck()->updateListWidget();
     screenshotView::getInstance()->getCheck()->updateScreenshots();
