@@ -46,7 +46,6 @@ public:
     bool dragTotally = true;
 
     QList<QPixmap> screenshots;
-    QList<QString> headlines;
     QList<QString> illustrate;
 
     int screenshotValue;

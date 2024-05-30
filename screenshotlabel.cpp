@@ -1,5 +1,6 @@
 ﻿#include "screenshotlabel.h"
 #include "commandmanager.h"
+#include "screenshotview.h"
 
 #include <QWheelEvent>
 #include <QDebug>
@@ -31,6 +32,9 @@ void screenshotLabel::wheelEvent(QWheelEvent *event)
 
     // 在label中显示对应索引的图片
     changeScreenshot(currentImageIndex);
+    if(!commandManager::getInstance()->screenshots.isEmpty()){
+        label_headline->setText(QString::number(verticalScrollBar->value()+ 1) + "/" + QString::number(commandManager::getInstance()->screenshots.size()));
+    }
 
     event->accept();
 }
@@ -38,9 +42,10 @@ void screenshotLabel::wheelEvent(QWheelEvent *event)
 void screenshotLabel::changeScreenshot(int value){
     if(commandManager::getInstance()->screenshots.size() > 0){
         QPixmap screenshot;
+        //qDebug() << "changeScreenshot\t" + QString::number(size().width()) + "\t" + QString::number(size().height());
+        //screenshot = commandManager::getInstance()->screenshots.at(value).scaled(size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
         screenshot = commandManager::getInstance()->screenshots.at(value).scaled(size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
         setPixmap(screenshot);
-        label_headline->setText(commandManager::getInstance()->headlines.at(value));
         illustrate->setText(commandManager::getInstance()->illustrate.at(value));
         listWidget->setCurrentRow(value);
     }
@@ -64,6 +69,5 @@ void screenshotLabel::mouseDoubleClickEvent(QMouseEvent *event)
         originalWidget->setStyleSheet("background-color: gray;");
         originalWidget->setGeometry(0,0,originalWidget->width(),originalWidget->height());
         originalWidget->show();
-        //33333234234234234
     }
 }

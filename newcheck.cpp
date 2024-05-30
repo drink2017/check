@@ -156,6 +156,7 @@ void newCheck::setupWidgets(UiMainWindow *Widget){
 
     label_2 = new QLabel(widget);
     label_2->setObjectName(QString::fromUtf8("label_2"));
+    label_2->setText("0/0");
 
     horizontalLayout_2->addWidget(label_2);
 
@@ -179,6 +180,7 @@ void newCheck::setupWidgets(UiMainWindow *Widget){
     sizePolicy.setHeightForWidth(listWidget->sizePolicy().hasHeightForWidth());
     listWidget->setSizePolicy(sizePolicy);
     listWidget->setViewMode(QListView::IconMode);
+    listWidget->setDragEnabled(false);
 
     horizontalLayout_3->addWidget(listWidget);
 
@@ -266,7 +268,6 @@ void newCheck::retranslateUi(){
     pushButton_2->setText(QCoreApplication::translate("Widget", "\351\207\215\346\210\252", nullptr));
     pushButton_3->setText(QCoreApplication::translate("Widget", "\345\210\240\351\231\244", nullptr));
     pushButton_4->setText(QCoreApplication::translate("Widget", "\346\270\205\347\251\272", nullptr));
-    label_2->setText(QCoreApplication::translate("Widget", "\345\275\223\345\211\215\351\241\265/\345\205\261\350\256\241\345\245\275\345\244\232\351\241\265", nullptr));
     label_5->setText(QCoreApplication::translate("Widget", "TextLabel", nullptr));
     pushButton_5->setText(QCoreApplication::translate("Widget", "\351\242\204\350\247\210", nullptr));
     pushButton_6->setText(QCoreApplication::translate("Widget", "\347\255\276\345\255\227", nullptr));
@@ -306,7 +307,6 @@ void newCheck::slotOnDeleteButton(){
         textEdit->clear();
         commandManager::getInstance()->screenshotValue = verticalScrollBar->value();
         commandManager::getInstance()->screenshots.takeAt(commandManager::getInstance()->screenshotValue);
-        commandManager::getInstance()->headlines.takeAt(commandManager::getInstance()->screenshotValue);
         commandManager::getInstance()->illustrate.takeAt(commandManager::getInstance()->screenshotValue);
         if(commandManager::getInstance()->screenshotValue >= 1){
             commandManager::getInstance()->screenshotValue -= 1;
@@ -323,7 +323,6 @@ void newCheck::slotOnClearButton(){
         textEdit->setEnabled(false);
     }
     commandManager::getInstance()->screenshots.clear();
-    commandManager::getInstance()->headlines.clear();
     commandManager::getInstance()->illustrate.clear();
     updateScreenshots();
     updateListWidget();
@@ -360,15 +359,16 @@ void newCheck::updateScreenshots(){
     QPixmap screenshot;
     if(commandManager::getInstance()->screenshots.size() == 0){
         label_5->setText("未有截图");
-        label_2->setText("");
+        label_2->setText("0/0");
         textEdit->setEnabled(false);
     }else{
-        screenshot = commandManager::getInstance()->screenshots.at(commandManager::getInstance()->screenshotValue).scaled(label_5->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
-        label_5->setPixmap(screenshot);
-        label_2->setText(commandManager::getInstance()->headlines.at(commandManager::getInstance()->screenshotValue));
+        //screenshot = commandManager::getInstance()->screenshots.at(commandManager::getInstance()->screenshotValue).scaled(label_5->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+        //label_5->setPixmap(screenshot);
+        label_5->changeScreenshot(commandManager::getInstance()->screenshotValue);
         textEdit->setText(commandManager::getInstance()->illustrate.at(commandManager::getInstance()->screenshotValue));
         textEdit->setEnabled(true);
         listWidget->setCurrentRow(verticalScrollBar->value());
+        label_2->setText(QString::number(verticalScrollBar->value() + 1) + "/" + QString::number(commandManager::getInstance()->screenshots.size()));
     }
 }
 
@@ -411,8 +411,12 @@ void newCheck::updateListWidget(){
 
 void newCheck::slotOnListItemSelection(){
     int currentItemIndex = listWidget->currentRow();
-    label_5->changeScreenshot(currentItemIndex);
+    QPixmap screenshot;
+    screenshot = commandManager::getInstance()->screenshots.at(currentItemIndex).scaled(label_5->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+    label_5->setPixmap(screenshot);
     verticalScrollBar->setValue(currentItemIndex);
+    textEdit->setText(commandManager::getInstance()->illustrate.at(currentItemIndex));
+    label_2->setText(QString::number(currentItemIndex+1) + "/" +QString::number(commandManager::getInstance()->screenshots.size()));
 }
 
 void newCheck::slotOnTextChanged(){
