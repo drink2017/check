@@ -113,14 +113,14 @@ void controlWidget::setButtons(){
     //添加10个按钮
     pRectButton = new QPushButton(this);
     pRectButton->setFixedSize(QSize(32,32));
-    pRectButton->setToolTip("矩形");
+    pRectButton->setToolTip(u8"矩形");
     pRectButton->setCheckable(true);
     pRectButton->setChecked(false);
     QIcon rectIcon(":/icons/controlWidget/rectangle.png");
     pRectButton->setIcon(rectIcon);
 
     pRoundButton = new QPushButton(this);
-    pRoundButton->setToolTip("圆");
+    pRoundButton->setToolTip(u8"圆");
     pRoundButton->setFixedSize(QSize(32,32));
     pRoundButton->setCheckable(true);
     pRoundButton->setChecked(false);
@@ -137,7 +137,7 @@ void controlWidget::setButtons(){
 
     pPenButton = new QPushButton(this);
     pPenButton->setFixedSize(QSize(32,32));
-    pPenButton->setToolTip("画笔");
+    pPenButton->setToolTip(u8"画笔");
     pPenButton->setCheckable(true);
     pPenButton->setChecked(false);
     QIcon penIcon(":/icons/controlWidget/pen.png");
@@ -145,7 +145,7 @@ void controlWidget::setButtons(){
 
     pTextButton = new QPushButton;
     pTextButton->setFixedSize(QSize(32,32));
-    pTextButton->setToolTip("文字");
+    pTextButton->setToolTip(u8"文字");
     pTextButton->setCheckable(true);
     pTextButton->setChecked(false);
     QIcon textIcon(":/icons/controlWidget/text.png");
@@ -161,19 +161,19 @@ void controlWidget::setButtons(){
 
     pUndoButton = new QPushButton;
     pUndoButton->setFixedSize(QSize(32,32));
-    pUndoButton->setToolTip("撤销");
+    pUndoButton->setToolTip(u8"撤销");
     QIcon undoIcon(":/icons/controlWidget/undo.png");
     pUndoButton->setIcon(undoIcon);
 
     pRedoButton = new QPushButton;
-    pRedoButton->setToolTip("重做");
+    pRedoButton->setToolTip(u8"重做");
     pRedoButton->setFixedSize(QSize(32,32));
     QIcon redoIcon(":/icons/controlWidget/redo.png");
     pRedoButton->setIcon(redoIcon);
 
     pNOButton = new QPushButton;
     pNOButton->setFixedSize(QSize(32,32));
-    pNOButton->setToolTip("退出截图");
+    pNOButton->setToolTip(u8"退出截图");
     QIcon noIcon = QApplication::style()->standardIcon(QStyle::SP_DialogCloseButton);
     pNOButton->setIcon(noIcon);
 
@@ -605,10 +605,10 @@ void controlWidget::shot(){
     QPixmap screenshot = screen->grabWindow(0,captureRect.x(),captureRect.y(),captureRect.width(),captureRect.height());
     if(screenshotView::getInstance()->getType() == shotType::newShot){
         commandManager::getInstance()->screenshots.append(screenshot);
-        commandManager::getInstance()->illustrate.append("");
+        commandManager::getInstance()->illustrate.append("校核说明：\n");
     }else if(screenshotView::getInstance()->getType() == shotType::replace){
         commandManager::getInstance()->screenshots.replace(commandManager::getInstance()->screenshotValue,screenshot);
-        commandManager::getInstance()->illustrate.replace(commandManager::getInstance()->screenshotValue,"");
+        commandManager::getInstance()->illustrate.replace(commandManager::getInstance()->screenshotValue,"校核说明：\n");
     }
     screenshotView::getInstance()->getCheck()->updateListWidget();
     screenshotView::getInstance()->getCheck()->updateScreenshots();

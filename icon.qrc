@@ -16,5 +16,8 @@
         <file>icons/newCheck/replace.png</file>
         <file>icons/newCheck/clear.png</file>
         <file>icons/newCheck/main.png</file>
+        <file>icons/colorWidget/cu.png</file>
+        <file>icons/colorWidget/xi.png</file>
+        <file>icons/colorWidget/zhong.png</file>
     </qresource>
 </RCC>

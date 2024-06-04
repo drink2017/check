@@ -24,18 +24,24 @@ colorWidget::colorWidget(QWidget *parent) : QWidget(parent)
 void colorWidget::setButtons(){
     xiButton = new QPushButton(this);
     xiButton->setFixedSize(QSize(50,50));
-    xiButton->setText("细");
+    //xiButton->setText(u8"细");
     xiButton->setCheckable(true);
+    QIcon xiIcon(":/icons/colorWidget/xi.png");
+    xiButton->setIcon(xiIcon);
 
     zhongButton = new QPushButton(this);
     zhongButton->setFixedSize(QSize(50,50));
-    zhongButton->setText("中");
+    //zhongButton->setText(u8"中");
     zhongButton->setCheckable(true);
+    QIcon zhongIcon(":/icons/colorWidget/zhong.png");
+    zhongButton->setIcon(zhongIcon);
 
     cuButton = new QPushButton(this);
     cuButton->setFixedSize(QSize(50,50));
-    cuButton->setText("粗");
+    //cuButton->setText(u8"粗");
     cuButton->setCheckable(true);
+    QIcon cuIcon(":/icons/colorWidget/cu.png");
+    cuButton->setIcon(cuIcon);
 
     blackButton = new QPushButton(this);
     blackButton->setFixedSize(QSize(24,24));

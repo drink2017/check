@@ -55,6 +55,9 @@ private:
     void setupWidgets(UiMainWindow* Widget);
     void retranslateUi();
 
+    void write();
+    void read();
+
     bool messageBoxIsShowing = false;
 
     bool generatePDF(QString filePath);

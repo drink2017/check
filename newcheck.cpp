@@ -17,10 +17,10 @@ newCheck::newCheck()
     //设置样式
     this->setStyle(UiMainWindow::UiStyle::Light);
     //设置标题
-    setWindowTitle("校核");
+    setWindowTitle(u8"校核");
     //设置字体
     QFont font;
-    font.setFamily("思源黑体");
+    font.setFamily(u8"思源黑体");
     font.setPixelSize(13);
     this->setTitleFont(font);
 
@@ -40,22 +40,22 @@ newCheck::newCheck()
 
     QIcon beginScreenshot(":/icons/newCheck/beginScreenshot.png");
     pushButton->setIcon(beginScreenshot);
-    pushButton->setToolTip("开始截图");
+    pushButton->setToolTip(u8"开始截图");
 
     QIcon deleteScreenshot(":/icons/newCheck/delete.png");
     pushButton_3->setIcon(deleteScreenshot);
-    pushButton_3->setToolTip("删除截图");
+    pushButton_3->setToolTip(u8"删除截图");
 
     QIcon replaceScreenshot(":/icons/newCheck/replace.png");
     pushButton_2->setIcon(replaceScreenshot);
-    pushButton_2->setToolTip("重新截图");
+    pushButton_2->setToolTip(u8"重新截图");
 
     QIcon clearScreenshot(":/icons/newCheck/clear.png");
     pushButton_4->setIcon(clearScreenshot);
-    pushButton_4->setToolTip("清空截图");
+    pushButton_4->setToolTip(u8"清空截图");
 
     //截图显示
-    label_5->setText("未有截图");
+    label_5->setText(u8"未有截图");
 
     //拉动条
     QString styleSheet = "QScrollBar { background-color: gray; }";
@@ -114,6 +114,7 @@ void newCheck::setupWidgets(UiMainWindow *Widget){
     horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
     label_4 = new QLabel(widget);
     label_4->setObjectName(QString::fromUtf8("label_4"));
+    label_4->setMinimumHeight(30);
 
     horizontalLayout_5->addWidget(label_4);
 
@@ -248,15 +249,20 @@ void newCheck::setupWidgets(UiMainWindow *Widget){
 
     horizontalLayout_4->addItem(horizontalSpacer_2);
 
+    pushButton_8 = new QPushButton(widget);
+    pushButton_8->setObjectName(QString::fromUtf8("pushButton_8"));
+
+    horizontalLayout_4->addWidget(pushButton_8);
+
     pushButton_9 = new QPushButton(widget);
     pushButton_9->setObjectName(QString::fromUtf8("pushButton_9"));
 
     horizontalLayout_4->addWidget(pushButton_9);
 
-    pushButton_8 = new QPushButton(widget);
-    pushButton_8->setObjectName(QString::fromUtf8("pushButton_8"));
+    //pushButton_8 = new QPushButton(widget);
+    //pushButton_8->setObjectName(QString::fromUtf8("pushButton_8"));
 
-    horizontalLayout_4->addWidget(pushButton_8);
+    //horizontalLayout_4->addWidget(pushButton_8);
 
 
     verticalLayout->addLayout(horizontalLayout_4);
@@ -281,7 +287,8 @@ void newCheck::retranslateUi(){
     pushButton_6->setText(QCoreApplication::translate("Widget", "\347\255\276\345\255\227", nullptr));
     pushButton_7->setText(QCoreApplication::translate("Widget", "\345\257\274\345\207\272", nullptr));
     pushButton_9->setText(QCoreApplication::translate("Widget", "\345\217\226\346\266\210", nullptr));
-    pushButton_8->setText(QCoreApplication::translate("Widget", "\347\241\256\345\256\232", nullptr));
+    //pushButton_8->setText(QCoreApplication::translate("Widget", "\347\241\256\345\256\232", nullptr));
+    pushButton_8->setText("暂存");
 }
 
 void newCheck::slotOnBeginButton(){
@@ -348,11 +355,11 @@ void newCheck::slotOnDeleteAllButton(){
 
 void newCheck::slotOnSignButton(){
     QString name = "name";
-    label_4->setText("校核人:" + name);
+    label_4->setText(u8"校核人:" + name);
 
     QDateTime currentDateTime = QDateTime::currentDateTime();
     QString currentTime = currentDateTime.toString("yyyy-MM-dd hh:mm:ss");
-    label_6->setText("校核时间:" + currentTime);
+    label_6->setText(u8"校核时间:" + currentTime);
     pushButton_6->setEnabled(false);
     pushButton->setEnabled(false);
     pushButton_2->setEnabled(false);
@@ -381,7 +388,7 @@ void newCheck::updateScreenshots(){
     verticalScrollBar->setRange(0,commandManager::getInstance()->screenshots.size() - 1);
     QPixmap screenshot;
     if(commandManager::getInstance()->screenshots.size() == 0){
-        label_5->setText("未有截图");
+        label_5->setText(u8"未有截图");
         label_2->setText("0/0");
         textEdit->setEnabled(false);
     }else{
@@ -461,20 +468,24 @@ bool newCheck::generatePDF(QString filePath){
                 QRect myPageRect = QRect(167,167,13365,9249);
                 painter.setPen(QPen(Qt::black,5));
 
-                QFont titleFont("思源黑体", 20, QFont::Bold);
+                QFont titleFont(u8"思源黑体", 20, QFont::Bold);
                 painter.setFont(titleFont);
 
-                painter.drawText(myPageRect,Qt::AlignHCenter,label->text().remove("校核单:"));
-                int titleHeight = painter.fontMetrics().boundingRect(label->text().remove("校核单:")).height() + 250;
+                //painter.drawText(myPageRect,Qt::AlignHCenter,label->text().remove(u8"校核单:"));
+                painter.drawText(myPageRect,Qt::AlignHCenter,lineEdit->text());
+                //int titleHeight = painter.fontMetrics().boundingRect(label->text().remove(u8"校核单:")).height() + 250;
+                int titleHeight = painter.fontMetrics().boundingRect(lineEdit->text()).height() + 250;
                 myPageRect = QRect(myPageRect.x(),myPageRect.y() + titleHeight,myPageRect.width(),myPageRect.height() - titleHeight);
 
-                QFont contentFont("思源黑体",14 , QFont::Bold);
+                QFont contentFont(u8"思源黑体",14 , QFont::Bold);
                 painter.setFont(contentFont);
 
                 int partRectHeight = 150;
                 QRect contentRect = QRect(myPageRect.x() + 75,myPageRect.y() + partRectHeight,myPageRect.width() - 150,myPageRect.height() - partRectHeight);
-                painter.drawText(contentRect,Qt::AlignLeft,label_3->text() + lineEdit->text());
-                int contentHeight = painter.fontMetrics().boundingRect(label_3->text() + lineEdit->text()).height();
+                //painter.drawText(contentRect,Qt::AlignLeft,label_3->text() + lineEdit->text());
+                painter.drawText(contentRect,Qt::AlignLeft,label->text());
+                //int contentHeight = painter.fontMetrics().boundingRect(label_3->text() + lineEdit->text()).height();
+                int contentHeight = painter.fontMetrics().boundingRect(label->text()).height();
                 QRect rectToDraw(myPageRect.x(),myPageRect.y(),myPageRect.width(),partRectHeight * 2 + contentHeight);
                 painter.drawRect(rectToDraw);
                 myPageRect = QRect(myPageRect.x(),myPageRect.y() + rectToDraw.height() + 200,myPageRect.width(),myPageRect.height() - rectToDraw.height() - 200);
@@ -493,17 +504,29 @@ bool newCheck::generatePDF(QString filePath){
                 painter.drawRect(rectToDraw);
                 myPageRect = QRect(myPageRect.x(),myPageRect.y() + rectToDraw.height() + 200,myPageRect.width(),myPageRect.height() - rectToDraw.height() - 200);
 
-                contentRect = QRect(myPageRect.x() + 75,myPageRect.y(),myPageRect.width() - 150,myPageRect.height());
-                painter.drawText(contentRect,Qt::AlignLeft,"截图：");
-                QRect instructRect = QRect(myPageRect.x() + myPageRect.width()/2 +75,myPageRect.y(),myPageRect.width()/2 - 150,myPageRect.height());
-                painter.drawText(instructRect,Qt::AlignLeft,"校核说明：");
-                contentHeight = painter.fontMetrics().boundingRect("截图：").height();
-                myPageRect = QRect(myPageRect.x(),myPageRect.y() + contentHeight + 200,myPageRect.width(),myPageRect.height() - contentHeight - 200);
+                //contentRect = QRect(myPageRect.x() + 75,myPageRect.y(),myPageRect.width() - 150,myPageRect.height());
+                //painter.drawText(contentRect,Qt::AlignLeft,u8"截图：");
+                //QRect instructRect = QRect(myPageRect.x() + myPageRect.width()/2 +75,myPageRect.y(),myPageRect.width()/2 - 150,myPageRect.height());
+                //painter.drawText(instructRect,Qt::AlignLeft,u8"校核说明：");
+                //contentHeight = painter.fontMetrics().boundingRect(u8"截图：").height();
+                //myPageRect = QRect(myPageRect.x(),myPageRect.y() + contentHeight + 200,myPageRect.width(),myPageRect.height() - contentHeight - 200);
 
-                painter.drawRect(myPageRect);
-                painter.drawLine(myPageRect.x() + myPageRect.width()/2,myPageRect.y(),myPageRect.x() + myPageRect.width()/2,myPageRect.y() + myPageRect.height());
+                //painter.drawRect(myPageRect);
+                //painter.drawLine(myPageRect.x() + myPageRect.width()/2,myPageRect.y(),myPageRect.x() + myPageRect.width()/2,myPageRect.y() + myPageRect.height());
 
-                QRect screenshotRect = QRect(myPageRect.x(),myPageRect.y(),myPageRect.width()/2,myPageRect.height());
+                int screenshotHeight = myPageRect.height() - 100;
+                painter.drawRect(QRect(myPageRect.x(),myPageRect.y(),myPageRect.width(),screenshotHeight));
+                painter.drawLine(myPageRect.x() + myPageRect.width()/2,myPageRect.y() ,myPageRect.x() + myPageRect.width()/2,myPageRect.y() + myPageRect.height() - 100);
+
+                contentRect = QRect(myPageRect.x() + 75,myPageRect.y() + 75,myPageRect.width()/2 - 150,myPageRect.height() - 75);
+                painter.drawText(contentRect,Qt::AlignLeft,u8"截图：");
+                QRect instructRect = QRect(myPageRect.x() + myPageRect.width()/2 + 75,myPageRect.y() + 75,myPageRect.width()/2 - 150,myPageRect.height() - 75);
+                painter.drawText(instructRect,Qt::AlignLeft,u8"校核说明：");
+                contentHeight = painter.fontMetrics().boundingRect(u8"截图：").height();
+                myPageRect = QRect(myPageRect.x(),myPageRect.y() + contentHeight + 150,myPageRect.width(),myPageRect.height() - contentHeight - 150);
+
+                //QRect screenshotRect = QRect(myPageRect.x(),myPageRect.y(),myPageRect.width()/2,myPageRect.height());
+                QRect screenshotRect = QRect(myPageRect.x() + 10,myPageRect.y(),myPageRect.width()/2 - 20,myPageRect.height() - 110);
                 QSize screenshotSize = screenshot.size();
                 qreal scaleX = static_cast<qreal>(screenshotRect.width()) / screenshotSize.width();
                 qreal scaleY = static_cast<qreal>(screenshotRect.height()) / screenshotSize.height();
@@ -514,8 +537,10 @@ bool newCheck::generatePDF(QString filePath){
                 int y = screenshotRect.y() + (screenshotRect.height() - scaledHeight) / 2;
                 painter.drawPixmap(x,y,scaledWidth,scaledHeight,screenshot);
 
-                QRect illustrateRect = QRect(myPageRect.x() + myPageRect.width()/2,myPageRect.y(),myPageRect.width()/2,myPageRect.height());
+                //QRect illustrateRect = QRect(myPageRect.x() + myPageRect.width()/2,myPageRect.y(),myPageRect.width()/2,myPageRect.height());
+                QRect illustrateRect = QRect(myPageRect.x() + myPageRect.width()/2 + 75,myPageRect.y(),myPageRect.width()/2 - 150,myPageRect.height() - 100);
                 QString text = commandManager::getInstance()->illustrate.at(commandManager::getInstance()->screenshots.indexOf(screenshot));
+                text = text.remove(u8"校核说明：\n");
                 QStringList lines = text.split("\n");
                 QFontMetrics metrics(painter.font());
                 int lineHeight = metrics.height();
@@ -537,7 +562,7 @@ bool newCheck::generatePDF(QString filePath){
                     }
                 }
 
-                myPageRect = QRect(myPageRect.x(),myPageRect.y() + myPageRect.height() + 40,myPageRect.width(),lineHeight);
+                myPageRect = QRect(myPageRect.x(),myPageRect.y() + myPageRect.height() - 60,myPageRect.width(),lineHeight);
                 painter.drawText(myPageRect,Qt::AlignCenter,QString::number(page));
 
                 int currentIndex = commandManager::getInstance()->screenshots.indexOf(screenshot);
@@ -549,7 +574,7 @@ bool newCheck::generatePDF(QString filePath){
         }
         return true;
     }else{
-        QMessageBox::information(this, "Information", "没有截图，无法生成pdf");
+        QMessageBox::information(this, "Information", u8"没有截图，无法生成pdf");
         return false;
     }
 }

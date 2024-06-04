@@ -42,8 +42,6 @@ void screenshotLabel::wheelEvent(QWheelEvent *event)
 void screenshotLabel::changeScreenshot(int value){
     if(commandManager::getInstance()->screenshots.size() > 0){
         QPixmap screenshot;
-        //qDebug() << "changeScreenshot\t" + QString::number(size().width()) + "\t" + QString::number(size().height());
-        //screenshot = commandManager::getInstance()->screenshots.at(value).scaled(size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
         screenshot = commandManager::getInstance()->screenshots.at(value).scaled(size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
         setPixmap(screenshot);
         illustrate->setText(commandManager::getInstance()->illustrate.at(value));

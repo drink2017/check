@@ -1,4 +1,4 @@
-#ifndef MYELLIPSEITEM_H
+﻿#ifndef MYELLIPSEITEM_H
 #define MYELLIPSEITEM_H
 
 #include <QGraphicsEllipseItem>
