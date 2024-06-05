@@ -8,6 +8,7 @@
 #include <QPrinter>
 #include <QDesktopServices>
 #include <QFileDialog>
+#include <QTimer>
 
 #include "screenshotview.h"
 #include "commandmanager.h"
@@ -32,6 +33,7 @@ newCheck::newCheck()
     setWindowIcon(mainIcon);
 
     setupWidgets(this);
+    read();
 
     label_5->label_headline = label_2;
     label_5->verticalScrollBar = verticalScrollBar;
@@ -74,6 +76,9 @@ newCheck::newCheck()
     connect(pushButton_9,&QPushButton::clicked,this,&newCheck::slotOnDeleteAllButton);
     connect(listWidget,&QListWidget::itemSelectionChanged,this,&newCheck::slotOnListItemSelection);
     connect(textEdit,&QTextEdit::textChanged,this,&newCheck::slotOnTextChanged);
+    connect(pushButton_8,&QPushButton::clicked,this,&newCheck::slotOnSaveButton);
+
+    label_5->resize(QSize(332,393));
 }
 
 newCheck::~newCheck(){
@@ -218,7 +223,6 @@ void newCheck::setupWidgets(UiMainWindow *Widget){
 
     textEdit = new QTextEdit(widget);
     textEdit->setObjectName(QString::fromUtf8("textEdit"));
-    textEdit->setEnabled(false);
 
     horizontalLayout_3->addWidget(textEdit);
 
@@ -259,14 +263,7 @@ void newCheck::setupWidgets(UiMainWindow *Widget){
 
     horizontalLayout_4->addWidget(pushButton_9);
 
-    //pushButton_8 = new QPushButton(widget);
-    //pushButton_8->setObjectName(QString::fromUtf8("pushButton_8"));
-
-    //horizontalLayout_4->addWidget(pushButton_8);
-
-
     verticalLayout->addLayout(horizontalLayout_4);
-
 
     retranslateUi();
 
@@ -439,13 +436,15 @@ void newCheck::updateListWidget(){
 }
 
 void newCheck::slotOnListItemSelection(){
-    int currentItemIndex = listWidget->currentRow();
-    QPixmap screenshot;
-    screenshot = commandManager::getInstance()->screenshots.at(currentItemIndex).scaled(label_5->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
-    label_5->setPixmap(screenshot);
-    verticalScrollBar->setValue(currentItemIndex);
-    textEdit->setText(commandManager::getInstance()->illustrate.at(currentItemIndex));
-    label_2->setText(QString::number(currentItemIndex+1) + "/" +QString::number(commandManager::getInstance()->screenshots.size()));
+    if(!commandManager::getInstance()->screenshots.isEmpty() && !commandManager::getInstance()->illustrate.isEmpty()){
+        int currentItemIndex = listWidget->currentRow();
+        QPixmap screenshot;
+        screenshot = commandManager::getInstance()->screenshots.at(currentItemIndex).scaled(label_5->size(),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+        label_5->setPixmap(screenshot);
+        verticalScrollBar->setValue(currentItemIndex);
+        textEdit->setText(commandManager::getInstance()->illustrate.at(currentItemIndex));
+        label_2->setText(QString::number(currentItemIndex+1) + "/" +QString::number(commandManager::getInstance()->screenshots.size()));
+    }
 }
 
 void newCheck::slotOnTextChanged(){
@@ -503,16 +502,6 @@ bool newCheck::generatePDF(QString filePath){
                 rectToDraw = QRect(myPageRect.x(),myPageRect.y(),myPageRect.width(),partRectHeight * 2 + contentHeight);
                 painter.drawRect(rectToDraw);
                 myPageRect = QRect(myPageRect.x(),myPageRect.y() + rectToDraw.height() + 200,myPageRect.width(),myPageRect.height() - rectToDraw.height() - 200);
-
-                //contentRect = QRect(myPageRect.x() + 75,myPageRect.y(),myPageRect.width() - 150,myPageRect.height());
-                //painter.drawText(contentRect,Qt::AlignLeft,u8"截图：");
-                //QRect instructRect = QRect(myPageRect.x() + myPageRect.width()/2 +75,myPageRect.y(),myPageRect.width()/2 - 150,myPageRect.height());
-                //painter.drawText(instructRect,Qt::AlignLeft,u8"校核说明：");
-                //contentHeight = painter.fontMetrics().boundingRect(u8"截图：").height();
-                //myPageRect = QRect(myPageRect.x(),myPageRect.y() + contentHeight + 200,myPageRect.width(),myPageRect.height() - contentHeight - 200);
-
-                //painter.drawRect(myPageRect);
-                //painter.drawLine(myPageRect.x() + myPageRect.width()/2,myPageRect.y(),myPageRect.x() + myPageRect.width()/2,myPageRect.y() + myPageRect.height());
 
                 int screenshotHeight = myPageRect.height() - 100;
                 painter.drawRect(QRect(myPageRect.x(),myPageRect.y(),myPageRect.width(),screenshotHeight));
@@ -585,6 +574,94 @@ void newCheck::keyPressEvent(QKeyEvent *event)
         slotOnDeleteAllButton();
     }
 }
+
+void newCheck::slotOnSaveButton(){
+    write();
+}
+
+void newCheck::write(){
+    QString fileName = "data";
+    QFile file(fileName);
+    if(file.open(QIODevice::WriteOnly)){
+        QDataStream out(&file);
+
+        out << static_cast<quint32>(commandManager::getInstance()->screenshots.size());
+        for(const QPixmap pixmap : commandManager::getInstance()->screenshots){
+            out << pixmap;
+        }
+
+        out << static_cast<quint32>(commandManager::getInstance()->illustrate.size());
+        for (const QString str : commandManager::getInstance()->illustrate) {
+            out << str;
+        }
+
+        out << lineEdit->text();
+
+        file.close();
+    }else{
+        //处理打开失败的情况
+    }
+}
+
+void newCheck::read(){
+    QString fileName = "data";
+    QFile file(fileName);
+
+    if (file.open(QIODevice::ReadOnly)) {
+        QDataStream in(&file);
+
+        // 读取 QList<QPixmap>
+        quint32 pixmapCount;
+        in >> pixmapCount;
+        if(pixmapCount != 0){
+            commandManager::getInstance()->screenshotValue = 0;
+        }
+        for (quint32 i = 0; i < pixmapCount; ++i) {
+            QPixmap pixmap;
+            in >> pixmap;
+            commandManager::getInstance()->screenshots.append(pixmap);
+        }
+
+        // 读取 QList<QString>
+        quint32 stringCount;
+        in >> stringCount;
+        for (quint32 i = 0; i < stringCount; ++i) {
+            QString str;
+            in >> str;
+            commandManager::getInstance()->illustrate.append(str);
+        }
+
+        QString topic;
+        in >> topic;
+        lineEdit->setText(topic);
+
+        file.close();
+    } else {
+        // 处理打开文件失败的情况
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

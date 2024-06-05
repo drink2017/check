@@ -48,7 +48,7 @@ private:
     QPushButton *pushButton_7;                 //导出
     QSpacerItem *horizontalSpacer_2;
     QPushButton *pushButton_9;                 //取消
-    QPushButton *pushButton_8;                 //确定
+    QPushButton *pushButton_8;                 //暂存
 
     QScrollBar *verticalScrollBar;
 
@@ -70,7 +70,7 @@ public slots:
     void slotOnBeginButton();
     void slotOnSignButton();
     void updateScreenshots();
-    //void slotOnSaveButton();
+    void slotOnSaveButton();
     void slotOnDeleteAllButton();
     void slotOnExportButton();
     void slotOnPreviewButton();

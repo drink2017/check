@@ -97,7 +97,8 @@ DISTFILES += \
 RESOURCES += \
     icon.qrc
 
-unix|win32: LIBS += -L$$PWD/moduleui/lib/ -lModuleUId
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/moduleui/lib/ -lModuleUI
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/moduleui/lib/ -lModuleUId
 
 INCLUDEPATH += $$PWD/moduleui/include
 DEPENDPATH += $$PWD/moduleui/include
